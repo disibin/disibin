@@ -382,8 +382,21 @@ nav .fa-bars:hover{
     object-fit: contain;
 }
 
-
-
+.offercontainer{
+    height: 10rem;
+    padding: 40px;
+    border: 1px solid #FFF;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.offercontainer h2{
+    color: red;
+}
 
 .servicecontainer{
     width: 100%;
