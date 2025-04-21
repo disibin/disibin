@@ -1,0 +1,929 @@
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    user-select: none;
+}
+body{
+    width: 100%;
+    overflow-x: hidden;
+    font-family:Arial, Helvetica, sans-serif;
+    background: linear-gradient(-60deg, #060606, #0d222e, #2b0b28, #092e27);
+	background-size: 10000% 10000%;
+    perspective: 1000;
+	animation: gradient 20s ease infinite;
+    
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+nav{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    backdrop-filter: blur(80px);
+
+}
+nav .logo{
+    color: #fff;
+    font-weight: 600;
+    height: 4rem;
+    font-size: 25px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+}
+nav .navopt{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+}
+nav .navopt a{
+    color: #fff;
+    width: 120px;
+    height: 4rem;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+nav .navopt a:hover{
+    color: red;
+    transition: .4s;
+}
+nav .services, nav .contacts{
+    display: block;
+    position: relative;
+
+}
+nav .services:hover .serviceopt{
+    display: flex;
+
+}
+nav .contacts:hover .contactopt{
+    display: flex;
+}
+
+.services .serviceopt, .contacts .contactopt{
+    
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+
+    position: absolute;
+    left: 20%;
+
+}
+nav .serviceopt a, nav .contactopt a{
+    width: 180px;
+    height: 2rem;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+ nav .fa-bars{
+    width: 100px;
+    color: #fff;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+nav .fa-bars:hover{
+    color: red;
+    transition: .4s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.sidebarbox{
+    position: fixed;
+    width: 190px;
+    height: 90vh;
+    flex-direction: column;
+    display: none;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 999;
+    left: 3px;
+}
+.sidebaropt{
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    align-items: start;
+    cursor: pointer;
+}
+
+.sidebarbox .sidebar{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 15px;
+    position: relative;
+
+}
+.sidebarbox a{
+    color: #fff;
+    
+}
+
+.sidebarbox a:hover{
+    color: red;
+    transition: .4s;
+}
+
+.sidebar .services, .sidebar .contacts, .sidebar .packages{
+    display: block;
+    position: relative;
+
+}
+
+
+.sidebar .services .serviceopt, .sidebar .contacts .contactopt, .sidebar .packages .packageopt{
+    
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    position:relative;
+    left: 10px;
+    padding: 5px;
+
+}
+.sidebar .serviceopt a, .sidebar .contactopt a, .packageopt a{
+    width: 180px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+
+
+
+
+
+.usercontainer{
+    display: none;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 4.1rem;
+    padding: 20px;
+}
+.userbox{
+    color: #fff;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center ;
+    width: 100%;
+    height: 85vh;
+    text-align: center;
+}
+.signinbox, .signupbox{
+    background-color: #63636324;
+    width: 80%;
+    height: 340px;
+    padding: 30px;
+    border-radius: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+.signinwelcome, .signupwelcome{
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-items: start;
+    gap: 10px;
+    font-size: 18px;
+    position: relative;
+}
+
+.signinbox a, .signupbox a{
+    color: #fff;
+}
+.signindetails, .signupdetails{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 48%;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.signindetails input, .signupdetails input{
+    width: 250px;
+    border: none;
+    outline: none;
+    height: 20px;
+    border-radius: 5px;
+}
+.signindetails div, .signupdetails div{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: start;
+}
+.signindetails button, .signupdetails button{
+    margin-top: 1rem;
+    width: 100px;
+    height: 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.signinbox .line, .signupbox .line{
+    width: 2px;
+    background-color: #fff;
+    height: 100vh;
+}
+.signinbox .fa-xmark, .signupbox  .fa-xmark{
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    cursor: pointer;
+}
+
+.signupbox .fa-arrow-left{
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    cursor: pointer;
+}
+
+.signinbox,.signupbox{
+    display: none;
+}
+#signinstatus, #signupstatus{
+    color: red;
+    font-size:  12px;
+}
+
+
+
+
+
+
+
+
+
+
+.main{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 4.1rem;
+    padding: 20px;
+}
+
+
+
+
+
+
+
+.intro{
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center ;
+    width: 100%;
+    height: 85vh;
+    text-align: center;
+}
+.intro .introdetails{
+    width: 60%;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.intro .introdetails h1{
+    font-size: 35px;
+}
+.introdetails .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.introdetails .button a{
+    color: #fcfcfc;
+    width: 150px;
+    padding: 4px;
+    margin: 3px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+.introdetails .button a:hover{
+    color: red;
+    transition: .4s;
+}
+.intro img{
+    height: 250px;
+    width: 250px;
+    object-fit: contain;
+}
+
+
+
+
+.servicecontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+}
+.servicecontainer h1{
+    font-size: 30px;
+}
+.serviceboxes{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.servicebox{
+    width: 300px;
+    height: 250px;
+    background-color: #63636324;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+}
+.servicebox i{
+    color: #01F9C6;
+    font-size: 40px;
+}
+.servicebox:hover a{
+    display: block;
+    transition: .6s;
+}
+.servicebox a{
+    width: 120px;
+    font-size: 12px;
+    padding: 3px;
+    border-radius: 4px;
+    border: 1px solid #FFF;
+    color: #fff;
+    display: none;
+}
+.servicebox a:hover{
+    color: red;
+    transition: 0.4s;
+}
+
+
+
+
+
+
+.webdesigncontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+}
+.webdesigncontainer h1{
+    font-size: 30px;
+}
+
+.features{
+    width: 80%;
+    height: 350px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+}
+.features ul{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 7px;
+    background-color: #63636324;
+    padding: 20px;
+    border-radius: 10px;
+    width: 450px;
+
+}
+.webdesigncontainer a{
+    color: #fcfcfc;
+    width: 150px;
+    padding: 4px;
+    margin: 3px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+.webdesigncontainer a:hover{
+    color: red;
+    transition: .4s;
+}
+
+
+#webdesignpack, #webdevpack, #identitypack, #appdevpack, #ecompack, #staticwebpack{
+    display: none;
+}
+
+
+
+
+.packcontainer{
+    width: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 33rem;
+    border-bottom: 1px solid #4f31316d;
+
+}
+.packcontainer h1{
+    font-size: 30px;
+    color: #fff;
+}
+.packbox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 25rem;
+    width: 570px;
+    border-radius: 10px;
+    color: #060606;
+    background-color: #FFF;
+    overflow: hidden;
+    text-align: start;
+}
+.packname{
+    display: flex;
+    height: 3rem;
+    background-color: #dcdbdb;
+    width: 100%;
+}
+.packname h3{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 190px;
+}
+.packname .basicbtn{
+    
+    border-bottom: 2px solid black;
+}
+.pack1{
+    display: flex;
+}
+.pack2, .pack3{
+    display: none;
+}
+.pack{
+    width: 100%;
+}
+.pack1, .pack2, .pack3{
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 22rem;
+}
+.packtitle{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+}
+.packdetails{
+    padding: 20px;
+    width: 80%;
+    
+}
+.packdetails ul{
+    display: flex;
+    flex-direction: column;
+}
+.pack button{
+    width: 100%;
+    height: 2.4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border: none;
+    background-color: #01F9C6;
+    cursor: pointer;
+    font-size: 15px;
+    color: #060606;
+}
+.pack button:hover{
+    color: red;
+    transform: .4s;
+}
+
+
+
+
+
+.webdevcontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #FFF;
+    text-align: center;
+    padding: 40px;
+}
+.webdevcontainer h3{
+    font-size: 35px;
+}
+.webdevcontainer p{
+    font-size: 16px;
+}
+.webdevcontainer .webdevfeatures{
+    width: 70%;
+    height: 390px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+}
+.webdevcontainer .webdevfeatures ul{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 14px;
+    background-color: #63636324;
+    padding: 20px;
+    border-radius: 10px;
+    width: 60%;
+    height: 390px;
+}
+.buttonb{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+ .buttonb a{
+    color: #fcfcfc;
+    width: 200px;
+    padding: 4px;
+    margin: 3px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+ .buttonb a:hover{
+    color: red;
+    transition: .4s;
+}
+
+
+
+
+
+.eCommercecontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+}
+
+.eCommercecontainer h3{
+    font-size: 32px;
+
+}
+.eCommercecontainer p{
+    font-size: 17px;
+}
+.ecservice{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+.ecservicebox{
+    width: 180px;
+    height: 230px;
+    background-color: #63636324;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+.ecservicebox .ecservicetitle {
+    font-size: 15px;
+    font-weight: 600;
+}
+.ecservicebox:hover .ecservicetitle{
+    color: #01F9C6;
+}
+.ecservicebox .ecsevicedetails{
+    font-size: 13px;
+}
+
+.appdevcontainer, .staticwebcontainer, .identitycontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+    font-size: 17px;
+}
+.appdevcontainer h1{
+    font-size: 35px;
+}
+
+.appdevbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    font-size: 13px;
+}
+.appdevservice{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+.appdevserviceicon{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: #63636324;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.appdevservice:hover .appdevserviceicon i{
+    color: #01F9C6;
+}
+.appdevserviceicon i{
+    color: #fff;
+    
+}
+
+
+.staticwebcontainer h1{
+    font-size: 35px;
+
+}
+
+.staticwebcontainer .features ul{
+    height: 250px;
+}
+.identitycontainer h1{
+    font-size: 35px;
+
+}
+.brandidentity, .brandpromotion{
+    width: 70%;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #63636324;
+    flex-direction: column;
+    border-radius: 20px;
+    gap: 10px;
+    cursor: pointer;
+}
+.brandidentity ul, .brandpromotion ul{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    font-size: 18px;
+    gap: 5px;
+}
+.brand-whyus{
+    width: 70%;
+    height: 200px;
+    background-color: #63636324;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.brand-whyus ul{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    font-size: 18px;
+    gap: 5px;
+}
+
+
+
+
+
+.reviewcontainer{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+    font-size: 17px;
+    border-top: 1px solid #FFF;
+}
+.reviews{
+    width: 100%;
+    display: grid;
+    gap: 100px;
+    grid-template-columns: repeat(2, 1fr);
+}
+.reviewbox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #4f313124;
+    padding: 20px;
+    border-radius: 10px;
+    
+}
+.reviewbox img{
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* for every section under contentbox */
+/* .df{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #FFF;
+    text-align: center;
+    padding: 70px 40px 70px 40px;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+footer{
+    width: 100%;
+    height: 7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    color: #fff;
+    border-top: 1px solid #fff;
+}
+footer .title, footer .links{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+footer .links a{
+    color: red;
+    margin-left: 30px;
+}
+footer a:hover{
+    color: #fff;
+    transition: .3s;
+}
