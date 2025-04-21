@@ -1,466 +1,1048 @@
-//sidebar
-
-
-const contactbtn=document.querySelector("#contactbtn");
-const contactopt= document.querySelector("#scontactopt");
-const servicebtn=document.querySelector("#servicebtn");
-const serviceopt= document.querySelector("#sserviceopt");
-const packagebtn=document.querySelector("#packagebtn");
-const packageopt= document.querySelector(".packageopt");
-const reviewbtn= document.querySelector("#reviewbtn");
-const reviewcontainer= document.querySelector(".reviewcontainer");
-
-reviewbtn.onclick=function(act){
-    act.preventDefault();
-    reviewcontainer.scrollIntoView({ behavior: "smooth", block: "start" });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    packageopt.style.display="none";
-    serviceopt.style.display="none";
-    contactopt.style.display="none";
+    <title>DisiBin</title>
+    <link rel="icon" href="images/Favicon.png">
 
-}
-
-
-packagebtn.onclick= function(act){
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    act.preventDefault();
-    serviceopt.style.display="none";
-    contactopt.style.display="none";
-    packageopt.style.display= packageopt.style.display==="flex"? "none":"flex";
+    <!--style -->
+    <link rel="stylesheet" href="style.css">
 
-}
-servicebtn.onclick= function(act){
-    act.preventDefault();
-    contactopt.style.display="none";
-    packageopt.style.display="none";
-    serviceopt.style.display= serviceopt.style.display==="flex"? "none":"flex";
-}
-contactbtn.onclick= function(act){
-    act.preventDefault();
-    serviceopt.style.display="none";
-    packageopt.style.display="none";
-    contactopt.style.display= contactopt.style.display==="flex"? "none":"flex";
-}
-//sidebar finish
+    <!-- for smaller screen style -->
+     <link rel="stylesheet" href="responsive.css">
 
-//navbar start
-const navservicebtn=document.querySelectorAll("#navservicebtn");
-const webdesignbtn= document.querySelectorAll("#webdesignbtn");
-const webdevbtn= document.querySelectorAll("#webdevbtn");
-const ecombtn= document.querySelectorAll("#ecombtn");
-const webappbtn= document.querySelectorAll("#webappbtn");
-const staticbtn= document.querySelectorAll("#staticbtn");
-const brandidbtn= document.querySelectorAll("#brandidbtn");
+</head>
+<body>
+    <header>
+        <nav>
+            <i class="fa-solid fa-bars" id="menubtn"></i>
+            <a class="logo" href="">DisiBin</a>
+            <section class="navopt">
+                <a href="" style="color: #01F9C6;">Home</a>
+                <div class="services">
+                    <a href="" id="navservicebtn">Service</a>
+                    <div class="serviceopt">
+                        <a href="" id="webdesignbtn">Website Design</a>
+                        <a href="" id="webdevbtn">Website Development</a>
+                        <a href="" id="ecombtn">E-commerce Web</a>
+                        <a href="" id="webappbtn">Web App</a>
+                        <a href="" id="staticbtn">Static Web</a>
+                        <a href="" id="brandidbtn">Brand Identity</a>
+                    </div>
+                </div>
+                <a href="">About Us</a>
+                <div class="contacts">
+                    <a href="" id="navcontactbtn">Contacts</a>
+                    <div class="contactopt">
+                        <a href="https://facebook.com/disibin">Facebook</a>
+                        <a href="https://instagram.com/user.disibin">Instagram</a>
+                        <a href="https://youtube.com/@disibin">Youtube</a>
+                        <a href="mailto:disibin@gmail.com">e-Mail</a>
+                    </div>
 
+                </div>
+                <a href="" class="loginicon">Log in</a>
+            </section>
 
+        </nav>
+    </header>
 
-const servicebox=document.querySelector(".servicecontainer");
-const webdesignbox= document.querySelector(".webdesigncontainer")
-const webdevbox= document.querySelector(".webdevcontainer")
-const ecombox= document.querySelector(".eCommercecontainer")
-const webappbox= document.querySelector(".appdevcontainer")
-const staticbox= document.querySelector(".staticwebcontainer")
-const brandidbox= document.querySelector(".identitycontainer")
+    <!-- sidebar section -->
+    <section class="sidebarbox">
+        <section class="sidebar">
+            <a href="" style="color: #01F9C6;">Home</a>
+            <div class="services">
+                <a href="" id="servicebtn">Service</a>
+                <div class="serviceopt" id="sserviceopt">
+                    <a href="" id="webdesignbtn">Website Design</a>
+                    <a href="" id="webdevbtn">Website Development</a>
+                    <a href="" id="ecombtn">E-commerce Web</a>
+                    <a href="" id="webappbtn">Web App</a>
+                    <a href="" id="staticbtn">Static Web</a>
+                    <a href="" id="brandidbtn">Brand Identity</a>
+                </div>
+            </div>
+            <a href="">About Us</a>
+            <div class="contacts">
+                <a href="" id="contactbtn">Contacts</a>
+                <div class="contactopt" id="scontactopt">
+                    <a href="https://facebook.com/disibin">Facebook</a>
+                    <a href="https://instagram.com/user.disibin">Instagram</a>
+                    <a href="https://youtube.com/@disibin">Youtube</a>
+                </div>
 
-
-
-navservicebtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        servicebox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-webdesignbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        webdesignbox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-webdevbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        webdevbox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-ecombtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        ecombox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-webappbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        webappbox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-staticbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        staticbox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-brandidbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        brandidbox.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-})
-
-
-const sidebar= document.querySelector(".sidebarbox");
-const menubtn= document.querySelector("#menubtn");
-menubtn.onclick= function(){
-    sidebar.style.display= sidebar.style.display=== "flex"? "none": "flex"; 
-}
+            </div>
+            <div class="packages">
+                <a href="" id="packagebtn">Package</a>
+                <div class="packageopt">
+                    <a href="" id="webdesignpackbtn">Website Design</a>
+                    <a href="" id="webdevpackbtn">Website Development</a>
+                    <a href="" id="ecompackbtn">E-commerce Web</a>
+                    <a href="" id="webapppackbtn">Web App</a>
+                    <a href="" id="staticpackbtn">Static Web</a>
+                    <a href="" id="brandidpackbtn">Brand Identity</a>
+                </div>
+            </div>
+            <a href="" id="reviewbtn">Review</a>
+            <a href="" id="offerbtn">Offers</a>
+        </section>
+        <section class="sidebaropt">
+            
+            <a href="">Dashboard</a>
+            <a href="">Setting</a>
+            <a href="" class="loginicon">Log in</a>
+        </section>
+    </section>
 
 
-//navbar finish
 
 
-//userbox show hide
-
-const loginicon= document.querySelectorAll(".loginicon");
-const usercontainer=document.querySelector(".usercontainer");
-const userbox=document.querySelector(".userbox");
-const signinbox=document.querySelector(".signinbox");
-const gotosignup=document.querySelector("#gotosignup");
-const gotosignin=document.querySelector("#gotosignin");
-const signupbox=document.querySelector(".signupbox");
-const xsigninup=document.querySelectorAll("#xsigninup");
-xsigninup.forEach((button)=>{
-    button.onclick=function(){
-        usercontainer.style.display= "none";
-        userbox.style.display= "none";
-        signinbox.style.display= "none";
-        signupbox.style.display="none";
-        main.style.display= "flex";
-    }
-})
-gotosignup.onclick= function(act){
-    act.preventDefault();
-    signupbox.style.display="flex";
-    signinbox.style.display= "none";
-}
-gotosignin.onclick=function(){
-    
-    signupbox.style.display="none";
-    signinbox.style.display= "flex";
-}
-loginicon.forEach((buttun)=>{
-    buttun.onclick= function(act){
-        act.preventDefault();
-        usercontainer.style.display= "flex";
-        userbox.style.display= "flex";
-        signinbox.style.display= "flex";
-        main.style.display= "none";
-
+    <!-- userbox -->
+    <div class="usercontainer">
+        <div class="userbox">
         
-    }
-})
-
-//userbox  finish
-
-
-
-const main= document.querySelector(".main")
-
-
-// packages access
-
-const webdesignpackbtn= document.querySelectorAll("#webdesignpackbtn");
-const webdevpackbtn= document.querySelectorAll("#webdevpackbtn")
-const ecompackbtn= document.querySelectorAll("#ecompackbtn")
-const webapppackbtn= document.querySelectorAll("#webapppackbtn")
-const staticpackbtn= document.querySelectorAll("#staticpackbtn")
-const brandidpackbtn= document.querySelectorAll("#brandidpackbtn")
-
-
-const webdesignpack=document.querySelector("#webdesignpack");
-const webdevpack= document.querySelector("#webdevpack")
-const ecompack= document.querySelector("#ecompack")
-const appdevpack= document.querySelector("#appdevpack")
-const staticwebpack= document.querySelector("#staticwebpack")
-const identitypack= document.querySelector("#identitypack")
-
-
-
-
-brandidpackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        identitypack.style.display= identitypack.style.display== "flex"? "none": "flex";
-        identitypack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
-staticpackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        staticwebpack.style.display= staticwebpack.style.display== "flex"? "none": "flex";
-        staticwebpack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
-webapppackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        appdevpack.style.display= appdevpack.style.display== "flex"? "none": "flex";
-        appdevpack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
-ecompackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        ecompack.style.display= ecompack.style.display== "flex"? "none": "flex";
-        ecompack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
-webdevpackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        webdevpack.style.display= webdevpack.style.display== "flex"? "none": "flex";
-        webdevpack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
-webdesignpackbtn.forEach((button)=>{
-    button.onclick= function(act){
-        act.preventDefault();
-        webdesignpack.style.display= webdesignpack.style.display== "flex"? "none": "flex";
-        webdesignpack.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-})
+            <div class="signinbox">
+                <i class="fa-solid fa-xmark" id="xsigninup"></i>
+                <div class="signinwelcome">
+                    <h3>Welcome back to</h3>
+                    <h1>DisiBin</h1>
+                    <p>sign in to access your</p>
+                    <p>owned dashboard</p>
+                    <a href="" id="gotosignup">New here?</a>
+                    <p id="signinstatus"></p>
+                </div>
+                <div class="line"></div>
+                <div class="signindetails">
+                    <div>
+                        <label for="username">usrename</label>
+                        <input type="text" id="signinusername">
+                    </div>
+                    <div>
+                        <label for="password">password</label>
+                        <input type="text" id="signinpassword">
+                    </div>
+                    <a href="" id="gotosignup">forget password?</a>
+                    <button id="signin-btn" onclick="signin()">sign in</button>
+                    
+                </div>
+            </div>
+            <div class="signupbox">
+                <i class="fa-solid fa-arrow-left" id="gotosignin"></i>
+                <i class="fa-solid fa-xmark" id="xsigninup"></i>
+                <div class="signupwelcome">
+                    <h3>Welcome to</h3>
+                    <h1>Disibin</h1>
+                    <p>create your account to</p>
+                    <p>own your dashboard</p>
+                    <p>& enjoy our services</p>
+                    <p id="signupstatus"></p>
+                </div>
+                <div class="line"></div>
+                <div class="signupdetails">
+                    <div>
+                        <label for="name">name</label>
+                        <input type="text" id="newname">
+                    </div>
+                    <div>
+                        <label for="username">username</label>
+                        <input type="text" id="newusername">
+                    </div>
+                    <div>
+                        <label for="newemail">email</label>
+                        <input type="text" id="newemail">
+                    </div>
+                    <div>
+                        <label for="dob">date of birth</label>
+                        <input type="date" id="newdob">
+                    </div>
+                    <div>
+                        <label for="newpassword">password</label>
+                        <input type="text" id="newpassword">
+                    </div>
+                    <button id="signup-btn" onclick="signup()">sign up</button>
+                </div>
+            </div>
+            
+            
+        </div>
+    
+    </div>
+    
 
 
-
-// webdesign pack access
-
-const webdesbabtn=document.querySelector("#webdesbabtn");
-const webdesstbtn=document.querySelector("#webdesstbtn");
-const webdesprbtn= document.querySelector("#webdesprbtn");
-
-const webdesbapack=document.querySelector("#webdesbapack")
-const webdesstpack=document.querySelector("#webdesstpack")
-const webdesprpack=document.querySelector("#webdesprpack")
-
-webdesbabtn.onclick= function(){
-    webdesbapack.style.display="flex";
-    webdesstpack.style.display="none";
-    webdesprpack.style.display="none";
-    webdesbabtn.style.borderBottom= "2px solid black";
-    webdesstbtn.style.borderBottom= "none";
-    webdesprbtn.style.borderBottom= "none";
-
-}
-webdesstbtn.onclick= function(){
-    webdesbapack.style.display="none";
-    webdesstpack.style.display="flex";
-    webdesprpack.style.display="none";
-    webdesbabtn.style.borderBottom= "none";
-    webdesstbtn.style.borderBottom= "2px solid black";
-    webdesprbtn.style.borderBottom= "none";
-
-}
-webdesprbtn.onclick= function(){
-    webdesbapack.style.display="none";
-    webdesstpack.style.display="none";
-    webdesprpack.style.display="flex";
-    webdesbabtn.style.borderBottom= "none";
-    webdesstbtn.style.borderBottom= "none";
-    webdesprbtn.style.borderBottom= "2px solid black";
-
-}
+    <!-- main screen (default) -->
+    <section class="main">
+        
+        <section class="contentbox">
 
 
-// web dev pack access
-const webdevbabtn=document.querySelector("#webdevbabtn");
-const webdevstbtn=document.querySelector("#wevdevstbtn");
-const webdevprbtn= document.querySelector("#webdevprbtn");
+            <section class="intro">
+                <section class="introdetails">
+                    <h1>Hi! Welcome to</h1>
+                    <h1 style="color: #01F9C6;">DisiBin</h1>
+                    <h3>Website Designer & Developer Community</h3>
+                    <p>Our team is dedicated to building fast, reliable, and user-friendly websites for businesses of all sizes. From simple landing pages to full-featured web applications, we use the latest web technologies to create digital experiences that help you grow online. Partner with us to turn your ideas into a strong online presence.</p>
+                    
+                    <section class="button">
+                        <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                        <a href="" id="navservicebtn">Services</a>
+                    </section>
+                    
+                    
 
-const webdevbapack=document.querySelector("#webdevbapack")
-const webdevstpack=document.querySelector("#webdevstpack")
-const webdevprpack=document.querySelector("#webdevprpack")
+                </section>
 
-webdevbabtn.onclick= function(){
-    webdevbapack.style.display="flex";
-    webdevstpack.style.display="none";
-    webdevprpack.style.display="none";
-    webdevbabtn.style.borderBottom= "2px solid black";
-    webdevstbtn.style.borderBottom= "none";
-    webdevprbtn.style.borderBottom= "none";
-
-}
-wevdevstbtn.onclick= function(){
-    webdevbapack.style.display="none";
-    webdevstpack.style.display="flex";
-    webdevprpack.style.display="none";
-    webdevbabtn.style.borderBottom= "none";
-    webdevstbtn.style.borderBottom= "2px solid black";
-    webdevprbtn.style.borderBottom= "none";
-
-}
-webdevprbtn.onclick= function(){
-    webdevbapack.style.display="none";
-    webdevstpack.style.display="none";
-    webdevprpack.style.display="flex";
-    webdevbabtn.style.borderBottom= "none";
-    webdevstbtn.style.borderBottom= "none";
-    webdevprbtn.style.borderBottom= "2px solid black";
-
-}
-
-// ecom packages access
-const ecombabtn=document.querySelector("#ecombabtn");
-const ecomstbtn=document.querySelector("#ecomstbtn");
-const ecomprbtn= document.querySelector("#ecomprbtn");
-
-const ecombapack=document.querySelector("#ecombapack")
-const ecomstpack=document.querySelector("#ecomstpack")
-const ecomprpack=document.querySelector("#ecomprpack")
-
-ecombabtn.onclick= function(){
-    ecombapack.style.display="flex";
-    ecomstpack.style.display="none";
-    ecomprpack.style.display="none";
-    ecombabtn.style.borderBottom= "2px solid black";
-    ecomstbtn.style.borderBottom= "none";
-    ecomprbtn.style.borderBottom= "none";
-
-}
-ecomstbtn.onclick= function(){
-    ecombapack.style.display="none";
-    ecomstpack.style.display="flex";
-    ecomprpack.style.display="none";
-    ecombabtn.style.borderBottom= "none";
-    ecomstbtn.style.borderBottom= "2px solid black";
-    ecomprbtn.style.borderBottom= "none";
-
-}
-ecomprbtn.onclick= function(){
-    ecombapack.style.display="none";
-    ecomstpack.style.display="none";
-    ecomprpack.style.display="flex";
-    ecombabtn.style.borderBottom= "none";
-    ecomstbtn.style.borderBottom= "none";
-    ecomprbtn.style.borderBottom= "2px solid black";
-
-}
+                <img src="images/logo.png" alt="">
+                
+            </section>
 
 
-// appdev pack access
+            <div class="offercontainer">
+                <h3>Get your </h3>
+                <h2>10%</h2>
+                <h3>Discount on your first Purchase. Promo:</h3>
+                <h2>DISI10</h2>
 
-const appdevbabtn=document.querySelector("#appdevbabtn");
-const appdevstbtn=document.querySelector("#appdevstbtn");
-const appdevprbtn= document.querySelector("#appdevprbtn");
-const appdevbapack=document.querySelector("#appdevbapack");
-const appdevstpack=document.querySelector("#appdevstpack");
-const appdevprpack=document.querySelector("#appdevprpack");
-
-appdevbabtn.onclick= function(){
-    appdevbapack.style.display="flex";
-    appdevstpack.style.display="none";
-    appdevprpack.style.display="none";
-    appdevbabtn.style.borderBottom= "2px solid black";
-    appdevstbtn.style.borderBottom= "none";
-    appdevprbtn.style.borderBottom= "none";
-
-}
-appdevstbtn.onclick= function(){
-    appdevbapack.style.display="none";
-    appdevstpack.style.display="flex";
-    appdevprpack.style.display="none";
-    appdevbabtn.style.borderBottom= "none";
-    appdevstbtn.style.borderBottom= "2px solid black";
-    appdevprbtn.style.borderBottom= "none";
-
-}
-appdevprbtn.onclick= function(){
-    appdevbapack.style.display="none";
-    appdevstpack.style.display="none";
-    appdevprpack.style.display="flex";
-    appdevprbtn.style.borderBottom= "2px solid black";
-    appdevbabtn.style.borderBottom= "none";
-    appdevstbtn.style.borderBottom= "none";
-
-}
+            </div>
 
 
-// static web btn
-const staticbabtn=document.querySelector("#staticbabtn");
-const staticstbtn=document.querySelector("#staticstbtn");
-const staticprbtn= document.querySelector("#staticprbtn");
-const staticbapack=document.querySelector("#staticbapack");
-const staticstpack=document.querySelector("#staticstpack");
-const staticprpack=document.querySelector("#staticprpack");
+            <section class="servicecontainer">
+                <h1>Our Services</h1>
+                    <section class="serviceboxes">
+                        <section class="servicebox">
+                            <i class="fa-solid fa-swatchbook"></i>
+                            <h2>Website Design</h2>
+                            <p>clean, modern, and user-friendly website designs that reflect your brand and engage your audience</p>
+                            <a href="" id="webdesignbtn">Read More</a>
 
-staticbabtn.onclick= function(){
-    staticbapack.style.display="flex";
-    staticstpack.style.display="none";
-    staticprpack.style.display="none";
-    staticbabtn.style.borderBottom= "2px solid black";
-    staticstbtn.style.borderBottom= "none";
-    staticprbtn.style.borderBottom= "none";
+                        </section>
+                        <section class="servicebox">
+                            <i class="fa-solid fa-code"></i>
+                            <h2>Website Development</h2>
+                            <p>We develop high-quality websites that are fast, reliable, and mobile-friendly. Perfect for businesses, startups, and anyone who needs a strong online presence.</p>
+                            <a href="" id="webdevbtn">Read More</a>
 
-}
-staticstbtn.onclick= function(){
-    staticbapack.style.display="none";
-    staticstpack.style.display="flex";
-    staticprpack.style.display="none";
-    staticbabtn.style.borderBottom= "none";
-    staticstbtn.style.borderBottom= "2px solid black";
-    staticprbtn.style.borderBottom= "none";
+                        </section>
+                        <section class="servicebox">
+                            <i class="fa-solid fa-store"></i>
+                            <h2>E-Commerce Web</h2>
+                            <p>We create custom eCommerce websites that drive sales and enhance customer experience. From product listings to secure checkout, we design and develop everything to help your online store succeed.</p>
+                            <a href="" id="ecombtn">Read More</a>
 
-}
-staticprbtn.onclick= function(){
-    staticbapack.style.display="none";
-    staticstpack.style.display="none";
-    staticprpack.style.display="flex";
-    staticprbtn.style.borderBottom= "2px solid black";
-    staticbabtn.style.borderBottom= "none";
-    staticstbtn.style.borderBottom= "none";
+                        </section>
+                        <section class="servicebox">
+                            <i class="fa-solid fa-tablet-button"></i>
+                            <h2>App Development</h2>
+                            <p>We create custom mobile apps that deliver a seamless user experience. Whether for iOS or Android, our team builds apps that are fast, reliable, and built to scale with your business.</p>
+                            <a href="" id="webappbtn">Read More</a>
 
-}
+                        </section>
+                        <section class="servicebox">
+                            <i class="fa-solid fa-diagram-project"></i>
+                            <h2>Static Webpage</h2>
+                            <p>We create fast and reliable static websites that deliver your message clearly. Perfect for portfolios, blogs, or small business sites, our static websites are lightweight, secure, and easy to maintain.</p>
+                            <a href="" id="staticbtn">Read More</a>
 
+                        </section>
+                        <section class="servicebox">
+                            <i class="fa-solid fa-ranking-star"></i>
+                            <h2>Brand Identity</h2>
+                            <p>Branding is at the heart of your business. We offer creative and strategic branding services that give your business a strong visual identity and a voice that stands out in a crowded market.</p>
+                            <a href="" id="brandidbtn">Read More</a>
 
-
-//brand identity pack 
-const idbabtn=document.querySelector("#idbabtn");
-const idstbtn=document.querySelector("#idstbtn");
-const idprbtn= document.querySelector("#idprbtn");
-const idbapack=document.querySelector("#idbapack");
-const idstpack=document.querySelector("#idstpack");
-const idprpack=document.querySelector("#idprpack");
-
-idbabtn.onclick= function(){
-    idbapack.style.display="flex";
-    idstpack.style.display="none";
-    idprpack.style.display="none";
-    idbabtn.style.borderBottom= "2px solid black";
-    idstbtn.style.borderBottom= "none";
-    idprbtn.style.borderBottom= "none";
-
-}
-idstbtn.onclick= function(){
-    idbapack.style.display="none";
-    idstpack.style.display="flex";
-    idprpack.style.display="none";
-    idbabtn.style.borderBottom= "none";
-    idstbtn.style.borderBottom= "2px solid black";
-    idprbtn.style.borderBottom= "none";
-
-}
-idprbtn.onclick= function(){
-    idbapack.style.display="none";
-    idstpack.style.display="none";
-    idprpack.style.display="flex";
-    idprbtn.style.borderBottom= "2px solid black";
-    idbabtn.style.borderBottom= "none";
-    idstbtn.style.borderBottom= "none";
-
-}
+                        </section>
+                    </section>
+            </section>
 
 
+            <section class="webdesigncontainer">
+                <h1>Design Your WebSite</h1>
+                <p>we design websites that don’t just look good — they work beautifully. Our goal is to create user-friendly, visually appealing websites that reflect your brand and engage your audience.
+
+                    Whether you're a small business, a startup, or a personal brand, we design responsive websites that look great on all devices. We focus on clean layouts, easy navigation, and modern design trends to help your visitors find what they need — fast.
+                </p>
+                <section class="features">
+                    <ul>
+                        <p>What’s included in our web design services:</p>
+                        <li><p>Custom layout and visual design</p></li>
+                        <li><p>User experience (UX) and user interface (UI) focus</p></li>
+                        <li><p>Branding and color consistency</p></li>
+                        <li><p>SEO-friendly structure</p></li>
+                        <li><p>Mobile-friendly (responsive) design</p></li>
+                        
+    
+                    </ul>
+                    <ul>
+                        <p>Our Key Features</p>
+                        <li><p>Premium Designs & Luxury Themes</p></li>
+                        <li><p>Elegant Look</p></li>
+                        <li><p>Premium Features</p></li>
+                        <li><p>Custom High End Colors</p></li>
+                        <li><p>24/7 customer care and much more</p></li>
+                    </ul>
+                </section>
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="webdesignpackbtn">Buy Package</a>
+                    
+                </div>
+
+            </section>
+
+            <div class="packcontainer" id="webdesignpack">
+                <h1>Web Design package</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="webdesbabtn">Basic</h3>
+                        <h3 id="webdesstbtn">Standard</h3>
+                        <h3 id="webdesprbtn">Premium</h3>
+
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="webdesbapack">
+                            <div class="packtitle">
+                                <h3>Figma Landing Page Design</h3>
+                                <h3>$100</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Custom Landing Page Design (Upto 5 Sections) with Figma | Responsive | No Coding | Discuss More</p>
+                                    <li><p>1 page</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Source file</p></li>
+                                    <li><p>Unlimited Revisions</p></li>
+                                    <p>3-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="webdesstpack">
+                            <div class="packtitle">
+                                <h3>Homepage + 4 Inner Pages in Figma</h3>
+                                <h3>$400</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Unique Web Homepage + 4 Inner Pages Design in Figma (Desktop + Mobile) | No Coding | Discuss More </p>
+
+                                    <li><p>5 pages</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Source file</p></li>
+                                    <li><p>Unlimited Revisions</p></li>
+                                    <p>7-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="webdesprpack">
+                            <div class="packtitle">
+                                <h3>Homepage + 9 Inner Pages in Figma</h3>
+                                <h3>$800</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Unique Web Homepage + 9 Inner Pages Design in Figma (Desktop + Mobile) | No Coding | Discuss More</p>
+
+                                    <li><p>10 pages</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Source file</p></li>
+                                    <li><p>Unlimited Revisions</p></li>
+                                    <p>10-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <section class="webdevcontainer">
+                <h3>Build Your WebSite</h3>
+                <p>We build websites that go beyond just looking good — we focus on performance, functionality, and user experience. Our web development services are tailored to meet the unique needs of your business, helping you establish a powerful and effective online presence.</p>
+                <p>We work with the latest web technologies to create fast, secure, and scalable websites that work flawlessly across all devices and browsers. Whether you need a simple business website, a feature-rich web application, or a custom solution, we’ve got you covered.</p>
+                <section class="webdevfeatures">
+                    <ul>
+                        <h4>What we offer:</h4>
+                        <li><p>Custom Website Development – Built from scratch to match your exact needs and branding.</p></li>
+                        <li><p>Responsive Design – Your site will look great and work perfectly on desktops, tablets, and smartphones.</p></li>
+                        <li><p>Content Management Systems (CMS) – Easy-to-manage websites using WordPress, Webflow, or custom CMS.</p></li>
+                        <li><p>Web Applications – Dynamic, interactive apps tailored to your business processes.</p></li>
+                        <li><p>API Integration – Connect your website with third-party tools and platforms.</p></li>
+                        <li><p>Maintenance & Support – Ongoing updates, bug fixes, and improvements.</p></li>
+                    </ul>
+                    <ul>
+                        <h4>Why choose us:</h4>
+                        <li><p>Experienced developers focused on quality code</p></li>
+                        <li><p> Fast-loading, SEO-optimized websites</p></li>
+                        <li><p>Secure development practices</p></li>
+                        <li><p>Clear communication and collaboration throughout the project</p></li>
+                    </ul>
+                </section>
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="webdevpackbtn">Buy Package</a>
+                    
+                </div>
+            </section>
+
+            <div class="packcontainer" id="webdevpack">
+                <h1>Build Your Perfect Website</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="webdevbabtn">Basic</h3>
+                        <h3 id="wevdevstbtn">Standard</h3>
+                        <h3 id="webdevprbtn">Premium</h3>
+            
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="webdevbapack">
+                            <div class="packtitle">
+                                <h3>STARTUP</h3>
+                                <h3>$80</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>High Converting Landing Page design, Premium theme, BLOG, Image Slider, Social Media, Contact Form</p>
+
+                                    <li><p>Functional website</p></li>
+                                    <li><p>1 page</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>Opt-in form</p></li>
+                                    <li><p>5 plugins/extensions including social media</p></li>
+                                    <p>3-day delivery</p>
+                                    <p>3 Revision</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="webdevstpack">
+                            <div class="packtitle">
+                                <h3>BUSINESS</h3>
+                                <h3>$350</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>4 Page Responsive Website, Basic + Security, Stock Images, Page Builder, Google Map, Support</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>4 pages</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>Hosting setup</p></li>
+                                    <li><p>7 plugins/extensions including social media link</p></li>
+                                    <li><p>Speed optimization</p></li>
+                                    <p>5-day delivery</p>
+                                    <p>5 revision</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="webdevprpack">
+                            <div class="packtitle">
+                                <h3>BUSINESS PLUS</h3>
+                                <h3>$550</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>7 Page Commercial website development (10 products), Standard, Speed & SEO optimized, Color Branding</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>7 pages</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>10 plugins/extensions</p></li>
+                                    
+                                    <li><p>Hosting setup & Speed optimization</p></li>
+                                    <p>7-day delivery</p>
+                                    <p>7 Revision</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+            
+                </div>
+            </div>
+
+
+            <section class="eCommercecontainer">
+                <h3>Grow Your business faster and boost sells</h3>
+                <p>In today’s digital world, your online store is more than just a website — it's your business front, sales team, and customer service all rolled into one. We specialize in building high-performance eCommerce websites that are visually appealing, easy to manage, and built to convert visitors into loyal customers.</p>
+                <p>We understand that every business is unique, so we offer custom eCommerce solutions tailored to your brand, products, and customer needs. Whether you're a small business starting fresh or an established store looking to grow, we help bring your vision to life with powerful tools, smart design, and seamless user experiences.</p>
+                <h4>Our eCommerce Development Services Include:</h4>
+                <seciton class="ecservice">
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Custom Store Design & Development</p>
+                        <p class="ecsevicedetails">We design fully responsive, user-friendly layouts that reflect your brand identity and make shopping intuitive and enjoyable across all devices.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Advanced Product Management</p>
+                        <p class="ecsevicedetails">Add, edit, organize, and manage your products effortlessly with categories, tags, inventory tracking, and filters to help customers find what they need fast.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Secure Payment Gateway Integration</p>
+                        <p class="ecsevicedetails">We integrate trusted payment options like PayPal, Stripe, Razorpay, and more, ensuring safe and smooth transactions for your customers.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Shipping & Order Management</p>
+                        <p class="ecsevicedetails">From flexible shipping options to real-time order tracking, we build systems that make logistics easier for both you and your customers.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Mobile-Optimized Shopping Experience</p>
+                        <p class="ecsevicedetails">With most shoppers using mobile devices, we ensure your store is fully responsive, fast-loading, and simple to navigate on phones and tablets.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Inventory & Stock Management</p>
+                        <p class="ecsevicedetails">Keep track of stock levels, receive low-stock alerts, and manage your products efficiently without hassle.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Analytics & Sales Reporting</p>
+                        <p class="ecsevicedetails">Get detailed insights into your sales performance, customer behavior, and top-selling products to help you make smarter business decisions.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Search Engine Optimization (SEO)</p>
+                        <p class="ecsevicedetails">We build your store with SEO best practices, helping your products get discovered on search engines like Google.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Marketing & Email Integration</p>
+                        <p class="ecsevicedetails">Connect your store with email platforms, social media, and marketing tools to keep customers engaged and boost repeat sales.</p>
+                    </section>
+                    <section class="ecservicebox">
+                        <p class="ecservicetitle">Security & Performance Optimization</p>
+                        <p class="ecsevicedetails">We use the latest security measures, SSL, and optimization techniques to keep your site safe, fast, and reliable.</p>
+                    </section>
+                </seciton>
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="ecompackbtn">Buy Package</a>
+                    
+                </div>
+
+            </section>
+
+            <div class="packcontainer" id="ecompack">
+                <h1>Make Your Business SIte More Effective</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="ecombabtn">Basic</h3>
+                        <h3 id="ecomstbtn">Standard</h3>
+                        <h3 id="ecomprbtn">Premium</h3>
+            
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="ecombapack">
+                            <div class="packtitle">
+                                <h3>Gold Starter</h3>
+                                <h3>$300</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Converting Store Design + Logo/ Branding + 3 Pages + Legal Pages Checkout + Apps</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Content Upload</p></li>
+                                    <li><p>E-commerce functionality</p></li>
+                                    <li><p>2 Product</p></li>
+                                    <li><p>Social media icons</p></li>
+                                    <li><p>Payment Integration</p></li>
+                                    <p>5-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="ecomstpack">
+                            <div class="packtitle">
+                                <h3>Premium Store</h3>
+                                <h3>$550</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Premium Store Design + Products + Branding + Sales Booster Apps + All Pages+ Live Chat+ Checkout</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>7 pages</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>7 plugins/extensions</p></li>
+                                    <li><p>Hosting setup</p></li>
+                                    <li><p>Ecommerce Functionality</p></li>
+                                    <li><p>10 products</p></li>
+                                    <li><p>Payment Integration</p></li>
+                                    <p>7-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="ecomprpack">
+                            <div class="packtitle">
+                                <h3>Platinum Branded Store</h3>
+                                <h3>$850</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Premium Store Branding/ Design + Products + Track Order + Apps + Zoom Meetings + 30 Days Support</p>
+                                    <li><p>E-commerce Functionality</p></li>
+                                    <li><p>10 pages</p></li>
+                                    <li><p>10 plugins/extensions</p></li>
+                                    <li><p>20 products</p></li>
+                                    <li><p>Payment Integration</p></li>
+                                    <li><p>Hosting setup</p></li>
+                                    <p>14-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+            
+                </div>
+            </div>
+            
+
+
+            <section class="appdevcontainer">
+                <h1>Build Your Mobile App</h1>
+                <p>In a mobile-first world, having a custom app is no longer a luxury — it's a necessity. We specialize in building powerful, user-friendly mobile applications that bring your ideas to life and connect you with your audience in meaningful ways.</p>
+                <p>From sleek and simple utility apps to feature-rich, high-performance platforms, we create mobile apps that are designed to deliver results — whether it’s boosting engagement, simplifying processes, or driving sales.</p>
+                <h2>Our App Development Services Include:</h2>
+                <section class="appdevbox">
+                    
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>Custom Mobile App Development</p>
+                            <p>We create fully tailored apps based on your specific needs, brand identity, and business goals. From concept to deployment — we handle it all.</p>
+
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>iOS & Android Development</p>
+                            <p>We build native apps for both platforms using Swift, Kotlin, or cross-platform frameworks like Flutter and React Native — ensuring performance and consistency.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>UI/UX Design</p>
+                            <p>Great apps start with great design. We craft clean, intuitive user interfaces that provide a smooth and enjoyable experience for every user.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p> Cross-Platform Solutions</p>
+                            <p>Save time and budget with one codebase for both iOS and Android. Ideal for startups and fast-growing businesses.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>Backend Development & APIs</p>
+                            <p>We build secure, scalable backends that power your app and connect with any third-party service you need.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>Push Notifications & Real-Time Features</p>
+                            <p>Keep your users engaged and informed with custom alerts, in-app messaging, and live updates.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>App Testing & Quality Assurance</p>
+                            <p>Every app we build is thoroughly tested to ensure it’s fast, reliable, and bug-free before launch.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p> App Store Deployment</p>
+                            <p>We take care of submitting your app to the App Store and Google Play — handling all the technical and guideline requirements for you.</p>
+                        </div>
+                    </div>
+                    <div class="appdevservice">
+                        <div class="appdevserviceicon">
+                            <i class="fa-solid fa-info"></i>
+                        </div>
+                        <div class="appdevservicedetails">
+                            <p>Maintenance & Updates</p>
+                            <p>Post-launch support ensures your app stays up to date, secure, and running smoothly as you grow.</p>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="webapppackbtn">Buy Package</a>
+                    
+                </div>
+            </section>
+
+
+            <div class="packcontainer" id="appdevpack">
+                <h1>Our Team Will Build Your App</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="appdevbabtn">Basic</h3>
+                        <h3 id="appdevstbtn">Standard</h3>
+                        <h3 id="appdevprbtn">Premium</h3>
+            
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="appdevbapack">
+                            <div class="packtitle">
+                                <h3>Basic Phone App</h3>
+                                <h3>#300</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>2 Screens + Plus Splash Screen Mobile app development for both iOS and Android</p>
+                                    <li><p>Functional Android app</p></li>
+                                    <li><p>Functional IOS App</p></li>
+                                    <li><p>App icon</p></li>
+                                    <li><p>Splash screen</p></li>
+                                    <li><p>Source code</p></li>
+                                    <p>10-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="appdevstpack">
+                            <div class="packtitle">
+                                <h3>Gold</h3>
+                                <h3>$650</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Mobile Apps for iOS and Android with customised designed and backend up to 5 screens.</p>
+                                    <li><p>Functional Android app</p></li>
+                                    <li><p>Functional IOS App</p></li>
+                                    <li><p>App design</p></li>
+                                    <li><p>App Submission</p></li>
+                                    <li><p>App Icon</p></li>
+                                    <li><p>Source Code</p></li>
+                                    <p>30-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="appdevprpack">
+                            <div class="packtitle">
+                                <h3>Diamond</h3>
+                                <h3>$2500</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Customised Mobile Apps for iOS and Android with custom designs and backend server. Up to 8 screens</p>
+                                    <li><p>Functional Android app</p></li>
+                                    <li><p>Functional IOS App</p></li>
+                                    <li><p>App Submission</p></li>
+                                    <li><p>App Design </p></li>
+                                    <li><p>App Icon</p></li>
+                                    <li><p>Source Code</p></li>
+                                    <p>45-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+            
+                </div>
+            </div>
+            
+
+
+            <section class="staticwebcontainer">
+                <h1>Static Portfolio Website</h1>
+                <p>A static portfolio website is the perfect way to showcase your work, share your story, or promote your business online — with speed, simplicity, and style. We design clean, fast-loading static websites that are easy to maintain and perfect for portfolios, blogs, and small businesses.</p>
+                <p>Whether you're a freelancer, artist, writer, or entrepreneur, we help you build a beautiful online presence that highlights your skills, projects, and personality — with no complex backend or ongoing maintenance hassles.</p>
+                <div class="features">
+                    <ul>
+                        <p>Perfect For:</p>
+                        <li><p>Personal portfolios</p></li>
+                        <li><p>Creative professionals (designers, developers, photographers)</p></li>
+                        <li><p>Small business showcases</p></li>
+                        <li><p>Informational blogs or company news</p></li>
+                        <li><p>One-page websites & landing pages</p></li>
+                    </ul>
+                    <ul>
+                        <p>Key Features:</p>
+                        <li><p>Custom, responsive design – Looks great on all devices</p></li>
+                        <li><p>Lightning-fast performance – Minimal loading time</p></li>
+                        <li><p>SEO-friendly – Built to be easily found on Google</p></li>
+                        <li><p>Easy to update – We use clean HTML/CSS or simple static site generators</p></li>
+                        <li><p>Contact forms & social links – Stay connected with your audience</p></li>
+                    </ul>
+                </div>
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="staticpackbtn">Buy Package</a>
+                    
+                </div>
+            </section>
+
+
+            <div class="packcontainer" id="staticwebpack">
+                <h1>Best Portfolio Website Build Package</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="staticbabtn">Basic</h3>
+                        <h3 id="staticstbtn">Standard</h3>
+                        <h3 id="staticprbtn">Premium</h3>
+            
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="staticbapack">
+                            <div class="packtitle">
+                                <h3>Starter</h3>
+                                <h3>$110</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Single-page website with 4-5 sections, contact form, map, and integrated social links.</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>1 page</p></li>
+                                    <li><p>Responsive design</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>Social Media Link</p></li>
+                                    <p>4-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="staticstpack">
+                            <div class="packtitle">
+                                <h3>Gold</h3>
+                                <h3>$300</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Up to 4-5 pages with fast speed, security, contact form, and social media integration.</p>
+                                    <li><p>Functional website</p></li>
+                                    <li><p>5 pages</p></li>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>Social media icons</p></li>
+                                    <li><p>5 Commercially licensed images</p></li>
+                                    <li><p>Hosting setup</p></li>
+                                    <p>7-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="staticprpack">
+                            <div class="packtitle">
+                                <h3>Premium</h3>
+                                <h3>$400</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>Up tp 10 pages with payment integration, bookings and Ecommerce, Functional, user-responsive</p>
+                                    <li><p>Content upload</p></li>
+                                    <li><p>10 products</p></li>
+                                    <li><p>Speed optimization</p></li>
+                                    <li><p>Hosting setup</p></li>
+                                    <li><p>10 Commercially licensed images</p></li>
+                                    <li><p>Social media icons</p></li>
+                                    <p>10-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+            
+                </div>
+            </div>
+            
+
+            <section class="identitycontainer">
+                <h1>Create Your Brand Identity</h1>
+                <p>Your brand is more than just a logo — it’s the voice, style, and story that people remember. We'll help you build a strong, memorable brand identity and promote it effectively across digital and offline platforms.</p>
+                <p>Whether you’re starting fresh or rebranding, we work with you to create a consistent, professional look and feel that connects with your audience, builds trust, and sets you apart from the competition.</p>
+                <div class="brandidentity">
+                    <h3>Brand Identity</h3>
+                    <ul>
+                        <p>We shape the visual and verbal elements of your brand so it speaks clearly and consistently across all platforms.</p>
+                        <li><p>Custom logo design</p></li>
+                        <li><p>Brand color palette and typography</p></li>
+                        <li><p>Brand guidelines/style guide</p></li>
+                        <li><p>Business card and stationery design</p></li>
+                        <li><p>Voice & tone development</p></li>
+                        <li><p>Taglines and brand messaging</p></li>
+                    </ul>
+                </div>
+                <div class="brandpromotion">
+                    <h3>Brand Promotion</h3>
+                    <ul>
+                        <p>We help you take your brand to the world with strategic marketing and visibility tools that grow awareness and engagement.</p>
+                        <li><p>Social media branding and content design</p></li>
+                        <li><p>Digital marketing materials (banners, ads, thumbnails)</p></li>
+                        <li><p>Branded templates for posts, stories, and reels</p></li>
+                        <li><p>Promotional videos and product intros</p></li>
+                        <li><p>Print materials (flyers, brochures, posters)</p></li>
+                        <li><p>Event or campaign branding. Email and online ad designs</p></li>
+                    </ul>
+                </div>
+                <div class="brand-whyus">
+                    <ul>
+                        <h3>Why Choose Us?</h3>
+                        <li><p>Creative team focused on unique and impactful branding</p></li>
+                        <li><p>Consistent design across all platforms</p></li>
+                        <li><p>Custom-tailored strategies for your industry and audience</p></li>
+                        <li><p>Full support from concept to execution</p></li>
+                    </ul>
+                </div>
+                <p>A strong brand is your most valuable asset — let us help you craft it, grow it, and make it unforgettable.</p>
+                <div class="buttonb">
+                    <a href="mailto:disibin@gmail.com">Hire Developer</a>
+                    <a href="" id="brandidpackbtn">Buy Package</a>
+                    
+                </div>
+            </section>
+
+
+            <div class="packcontainer" id="identitypack">
+                <h1>We'll create Your Brand Identity</h1>
+                <div class="packbox">
+                    <div class="packname">
+                        <h3 class="basicbtn" id="idbabtn">Basic</h3>
+                        <h3 id="idstbtn">Standard</h3>
+                        <h3 id="idprbtn">Premium</h3>
+            
+                    </div>
+                    <div class="pack">
+                        <div class="pack1" id="idbapack">
+                            <div class="packtitle">
+                                <h3>Basic</h3>
+                                <h3>$50</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>1 Logo designs + color Palette + typography Guide + icon + mockup 3D</p>
+                                    <li><p>Color palette</p></li>
+                                    <li><p>Typography guidelines</p></li>
+                                    <li><p>Logo usage guidelines</p></li>
+                                    <p>7-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack2" id="idstpack">
+                            <div class="packtitle">
+                                <h3>Standard</h3>
+                                <h3>$150</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>2 HQ Logo + vector file + source file + 8 to 10 Pages professional brand guidelines + mockup 3D</p>
+                                    <li><p>Includes logo design</p></li>
+                                    <li><p>Logo usage guidelines</p></li>
+                                    <li><p>Color palette</p></li>
+                                    <li><p>Typography guidelines</p></li>
+                                    <li><p>Brand book design</p></li>
+                                    <p>14-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        <div class="pack3" id="idprpack">
+                            <div class="packtitle">
+                                <h3>Premium</h3>
+                                <h3>$280</h3>
+                            </div>
+                            <div class="packdetails">
+                                <ul><p>3 creative logo + 4 stationary + social media kit + 28 to 30 pages premium brand guide + mockup 3D</p>
+                                    <li><p>Includes logo design</p></li>
+                                    <li><p>Logo usage guidelines</p></li>
+                                    <li><p>Color palette</p></li>
+                                    <li><p>Typography guidelines</p></li>
+                                    <li><p>Iconography</p></li>
+                                    <li><p>Brand book design</p></li>
+                                    <p>21-day delivery</p>
+                                </ul>
+                            </div>
+                            <button>Continue<i class="fa-solid fa-angle-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+            
+                </div>
+            </div>
+
+
+            <section class="reviewcontainer">
+                <h1>Our Customer Reviews</h1>
+                <div class="reviews">
+                    <div class="reviewbox">
+                        <img src="images/profile1.jpg" alt="">
+                        <p id="review">"Outstanding work! The website they delivered is not just visually stunning, but also incredibly fast and responsive. From smooth navigation to perfect mobile optimization, everything is top-notch. Highly recommend for anyone looking for quality web solutions!”</p>
+            
+                        <h3 id="reviwername">-- B. Alison</h3>
+                    </div>
+                    <div class="reviewbox">
+                        <img src="images/profile2.png" alt="">
+                        <p id="review">"DisiBin did an amazing job on our website and branding. Their web development team built a fast, responsive site, and the graphic design work was creative and on point. Professional, easy to work with, and delivered everything on time. Highly recommend!”</p>
+        
+            
+                        <h3 id="reviwername">--jack W.</h3>
+                    </div>
+                </div>
+                
+                
+            </section>
+        
+            
+            
+        </section>
+    </section>
+
+
+
+
+
+    <!-- review section -->
+    
+
+
+    <!-- footer -->
+    <footer>
+        <div class="title">
+            <h3>DisiBin</h3>
+            <p>, a responsible website developer community that has been operating since 2024</p>
+        </div>
+        <div class="links">
+            <a href="branches/policy.html">Privacy & policy</a>
+            <a href="mailto:disibin@gmail.com">Mail</a>
+            <a href="https://facebook.com/disibin">Facebook</a>
+            <a href="https://instagram.com/user.disibin">Instagram</a>
+            <a href="https://youtube.com/@disibin">Youtube</a>
+        </div>
+        
+    </footer>
+<!-- script  body-->
+<script src="index.js"></script>
+<!-- user signin up script -->
+ <script src="user.js"></script>
+
+
+
+</body>
+
+</html>
