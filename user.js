@@ -1,15 +1,43 @@
 function signin(siginin) {
-    console.log("checking info........");
+    let signinusername= document.querySelector("#signinusername").value;
+    let signinpassword= document.querySelector("#signinpassword").value;
+    let status =document.querySelector("#signinstatus");
+
+
+    if(signinpassword==""|| signinusername==""){
+        status.innerText="fill all the inputs";
+    }
+    else{
+        status.innerText="checking info........"
+    }
+    console.log("sign in button clicked");
     
-    document.querySelector("#signinstatus").innerText = "server under construction"
 }
 
+
 function signup(signup){
-    console.log("Storing info........");
+    let newname=document.querySelector("#newname").value;
+    let newusername= document.querySelector("#newusername").value.toLowerCase();
+    let newemail=document.querySelector("#newemail").value;
+    let newdob= document.querySelector("#newdob").value;
+    let newpassword= document.querySelector("#newpassword").value;
+    let status =document.querySelector("#signupstatus");
+
+
+    if(newname==""|| newdob==""|| newusername==""||newemail==""|| newpassword==""){
+        status.innerText="fill all the inputs";
+    }
+    else if(newpassword.length<8){
+        status.innerText="password must contain 8 digit";
+    }
+    else{
+        status.innerText="storing info.....";
+    }
+    console.log("signup button clicked");
 
 
 
-    document.querySelector("#signupstatus").innerText = "server under construction"
+    
 }
 
 
