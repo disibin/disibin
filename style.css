@@ -396,6 +396,7 @@ nav .fa-bars:hover{
 }
 .offercontainer h2{
     color: red;
+    user-select: text;
 }
 
 .servicecontainer{
