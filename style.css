@@ -551,7 +551,7 @@ nav .fa-bars:hover{
 .packname{
     display: flex;
     height: 3rem;
-    background-color: #dcdbdb;
+    background-color: #efeded;
     width: 100%;
 }
 .packname h3{
@@ -611,8 +611,8 @@ nav .fa-bars:hover{
     color: #060606;
 }
 .pack button:hover{
-    color: red;
     transform: .4s;
+    background-color: #00ebbc;
 }
 
 
