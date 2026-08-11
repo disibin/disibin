@@ -268,7 +268,7 @@ const AboutPage = () => {
                 variants={fadeUp}
                 className="relative pl-10 pb-14 border-l-2 border-slate-200 last:border-transparent group"
               >
-                <div className="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-slate-300 group-hover:border-primary group-hover:bg-primary/10 transition-all duration-300" />
+                <div className="absolute -left-2.25 top-1 w-4 h-4 rounded-full bg-white border-2 border-slate-300 group-hover:border-primary group-hover:bg-primary/10 transition-all duration-300" />
                 <h3 className="text-2xl font-bold text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-base text-slate-500 leading-relaxed">{item.desc}</p>
               </motion.div>

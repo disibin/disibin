@@ -1,6 +1,7 @@
 import About from '@/component/public/pages/About'
 import Bio from '@/component/public/pages/Bio'
 import Hero from '@/component/public/pages/Hero'
+import Identity from '@/component/public/pages/Identity'
 import Intro from '@/component/public/pages/Intro'
 import Partners from '@/component/public/pages/Partners'
 import Reviews from '@/component/public/pages/Reviews'
@@ -23,6 +24,7 @@ const MainPage = () => {
       <Services/>
       <Reviews />
       <Partners />
+      <Identity/>
     </main>
   )
 }
