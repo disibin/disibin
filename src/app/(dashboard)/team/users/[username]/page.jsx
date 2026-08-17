@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Loader from '@/app/Loader';
+import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -49,7 +49,7 @@ export default function TeamUserProfilePage() {
   };
 
   if (loading) {
-    return <Loader fullScreen={false} size="md" text="Loading user profile..." />;
+    return <Loading fullScreen={false} size="md" />;
   }
 
   if (!profileData || !profileData.user) {

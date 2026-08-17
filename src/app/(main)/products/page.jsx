@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from '@/component/public/card/ProductCard';
-import Loader from '@/app/Loader';
+import Loading from '@/app/loading';
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -25,11 +25,7 @@ const ProductsPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader size="md" text="Loading products..." />
-      </div>
-    );
+    return <Loading size="md" />;
   }
 
   return (

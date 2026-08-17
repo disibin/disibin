@@ -5,9 +5,8 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 /**
- * Global Loader Component
- * Located in `src/app/Loader.jsx`
- * Uses the logo icon from the public folder (/icon.png)
+ * Global Loading Component & Next.js App Router fallback.
+ * Located in `src/app/loading.js`
  *
  * @param {Object} props
  * @param {boolean} [props.fullScreen=false] - Fullscreen backdrop overlay if true, section/container bounded if false
@@ -16,14 +15,13 @@ import { motion } from 'framer-motion'
  * @param {string} [props.className=''] - Extra container classes
  * @param {string} [props.iconSrc='/icon.png'] - Public icon path (default: /icon.png)
  */
-export default function Loader({
+export default function Loading({
   fullScreen = false,
   size = 'md',
   blur = true,
   className = '',
   iconSrc = '/icon.png',
-}) {
-  // Dimensions map for icon and surrounding indicator rings
+} = {}) {
   const sizeMap = {
     sm: { container: 'w-10 h-10', icon: 28, ring: 'w-14 h-14' },
     md: { container: 'w-20 h-20', icon: 56, ring: 'w-28 h-28' },
@@ -89,7 +87,11 @@ export default function Loader({
     )
   }
 
-  return content
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center w-full">
+      {content}
+    </div>
+  )
 }
 
-export { Loader }
+export { Loading }

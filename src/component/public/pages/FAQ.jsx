@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiChevronDown, FiArrowRight } from 'react-icons/fi'
 import Link from 'next/link'
 import axios from 'axios'
-import Loader from '@/app/Loader'
+import Loading from '@/app/loading'
 
 export default function FAQ() {
   const [faqs, setFaqs] = useState([])
@@ -53,7 +53,7 @@ export default function FAQ() {
 
         {loading ? (
           <div className="py-16">
-            <Loader fullScreen={false} size="md" text="Loading FAQs..." />
+            <Loading fullScreen={false} size="md" />
           </div>
         ) : faqs.length === 0 ? (
           <div className="text-center py-16 px-4 bg-slate-50 rounded-3xl border border-slate-100 mb-10">

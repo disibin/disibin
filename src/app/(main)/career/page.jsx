@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import Loader from '@/app/Loader';
+import Loading from '@/app/loading';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import {
@@ -121,7 +121,7 @@ export default function PublicCareerPage() {
 
         {loading ? (
           <div className="py-16">
-            <Loader fullScreen={false} size="md" text="Loading career openings..." />
+            <Loading fullScreen={false} size="md" />
           </div>
         ) : jobs.length === 0 ? (
           <div className=" p-12 rounded-3xl text-center text-slate-500 space-y-2">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Loader from '@/app/Loader';
+import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -227,7 +227,7 @@ export default function TeamProjectDetailPage() {
   };
 
   if (loading) {
-    return <Loader fullScreen={false} size="md" text="Loading staff project workspace..." />;
+    return <Loading fullScreen={false} size="md" />;
   }
 
   if (!projectData || !projectData.project) {

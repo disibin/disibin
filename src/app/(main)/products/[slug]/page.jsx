@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useContext } from 'react';
-import Loader from '@/app/Loader';
+import Loading from '@/app/loading';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -62,11 +62,7 @@ export default function ProductDetailPage() {
   }, [slug, router]);
 
   if (loading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader size="md" text="Loading product details..." />
-      </div>
-    );
+    return <Loading size="md" />;
   }
 
   if (!product) return null;
