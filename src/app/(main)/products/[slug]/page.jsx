@@ -35,9 +35,9 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('overview'); // overview, features, support
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,8 +46,6 @@ export default function ProductDetailPage() {
         const res = await axios.get(`/api/public/product/${slug}`);
         if (res.data.success) {
           setProduct(res.data.data);
-          const primaryIndex = res.data.data.images?.findIndex(img => img.is_primary);
-          setActiveIndex(primaryIndex !== -1 && primaryIndex !== undefined ? primaryIndex : 0);
         } else {
           toast.error("Product not found");
           router.push('/products');
@@ -62,16 +60,6 @@ export default function ProductDetailPage() {
     fetchProduct();
   }, [slug, router]);
 
-  useEffect(() => {
-    if (!product || !product.images || product.images.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % product.images.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [product, activeIndex]);
-
   if (loading) {
     return (
       <div className="min-h-screen w-full bg-slate-50/50 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-start">
@@ -80,12 +68,6 @@ export default function ProductDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 bg-white/60 border border-primary/10 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="lg:col-span-7 space-y-4">
               <div className="aspect-video bg-primary/10 rounded-2xl"></div>
-              <div className="grid grid-cols-4 gap-3">
-                <div className="aspect-video bg-primary/10 rounded-xl"></div>
-                <div className="aspect-video bg-primary/10 rounded-xl"></div>
-                <div className="aspect-video bg-primary/10 rounded-xl"></div>
-                <div className="aspect-video bg-primary/10 rounded-xl"></div>
-              </div>
             </div>
             <div className="lg:col-span-5 space-y-6 flex flex-col justify-between py-2">
               <div className="space-y-4">
@@ -108,7 +90,8 @@ export default function ProductDetailPage() {
   if (!product) return null;
 
   const images = product.images || [];
-  const activeImage = images[activeIndex]?.image || null;
+  const primaryImageObj = images.find((img) => img.is_primary) || images[0] || null;
+  const primaryImage = primaryImageObj?.image || null;
   const originalPrice = Number(product.price) || 0;
   const discountAmount = Number(product.discount) || 0;
   const finalPrice = discountAmount > 0
@@ -139,16 +122,16 @@ export default function ProductDetailPage() {
         {/* Product Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/50 p-6 sm:p-8 animate-fade-up">
 
-          {/* Left Column: Image Gallery & Carousel */}
+          {/* Left Column: Primary Image */}
           <div className="lg:col-span-7 space-y-4">
             <div className="relative aspect-video rounded-2xl overflow-hidden border border-slate-100 bg-slate-900/5 shadow-inner group flex items-center justify-center">
-              {activeImage ? (
+              {primaryImage ? (
                 <>
                   <Image
                     width={1200}
                     height={800}
-                    src={activeImage}
-                    alt={images[activeIndex]?.title || product.name}
+                    src={primaryImage}
+                    alt={primaryImageObj?.title || product.name}
                     className="w-full h-full object-cover transition-all duration-500"
                     priority
                   />
@@ -156,38 +139,16 @@ export default function ProductDetailPage() {
 
                   {/* Expand Image Button */}
                   <button
-                    onClick={() => setLightboxOpen(true)}
+                    onClick={() => {
+                      const primaryIdx = images.findIndex((img) => img.is_primary);
+                      setLightboxIndex(primaryIdx !== -1 ? primaryIdx : 0);
+                      setLightboxOpen(true);
+                    }}
                     className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-md text-slate-700 hover:text-primary hover:bg-white rounded-xl shadow-lg border border-slate-100 hover:scale-110 transition-all duration-200 cursor-pointer z-10"
                     aria-label="Expand image"
                   >
                     <FiMaximize2 size={16} />
                   </button>
-
-                  {/* Manual Arrow Controls */}
-                  {images.length > 1 && (
-                    <>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-                        }}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-md text-slate-700 hover:text-primary hover:bg-white rounded-full shadow-lg border border-slate-100 hover:scale-110 transition-all duration-200 cursor-pointer z-10"
-                        aria-label="Previous image"
-                      >
-                        <FiChevronLeft size={20} />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveIndex((prev) => (prev + 1) % images.length);
-                        }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-md text-slate-700 hover:text-primary hover:bg-white rounded-full shadow-lg border border-slate-100 hover:scale-110 transition-all duration-200 cursor-pointer z-10"
-                        aria-label="Next image"
-                      >
-                        <FiChevronRight size={20} />
-                      </button>
-                    </>
-                  )}
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center text-slate-300 gap-2 py-20">
@@ -196,34 +157,8 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
-
-            {/* Thumbnail Strip Selector */}
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 pt-2">
-                {images.map((img, idx) => (
-                  <button
-                    key={img.id || idx}
-                    onClick={() => setActiveIndex(idx)}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                      activeIndex === idx
-                        ? 'border-primary ring-2 ring-primary/20 scale-105 shadow-md'
-                        : 'border-slate-200/80 opacity-70 hover:opacity-100 hover:border-slate-300'
-                    }`}
-                  >
-                    <Image
-                      width={200}
-                      height={120}
-                      src={img.image}
-                      alt={img.title || `Thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Right Column: Product Overview, Price & CTAs */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               {/* Featured Badge & Pricing Header */}
@@ -321,9 +256,8 @@ export default function ProductDetailPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2.5 pb-4 font-bold text-sm transition-all relative shrink-0 cursor-pointer ${
-                  activeTab === tab.id ? 'text-primary' : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`flex items-center gap-2.5 pb-4 font-bold text-sm transition-all relative shrink-0 cursor-pointer ${activeTab === tab.id ? 'text-primary' : 'text-slate-400 hover:text-slate-600'
+                  }`}
               >
                 {tab.icon}
                 {tab.label}
@@ -426,6 +360,36 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
+        {images.length > 0 && (
+          <div className="mt-12 border-t border-slate-200/80 pt-10 animate-fade-in">
+            <div className="mb-6">
+              <h2 className="text-2xl font-extrabold text-slate-900">Product Gallery</h2>
+              <p className="text-xs text-slate-500 mt-1">All preview screenshots and images</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {images.map((img, idx) => (
+                <div
+                  key={img.id || idx}
+                  onClick={() => {
+                    setLightboxIndex(idx);
+                    setLightboxOpen(true);
+                  }}
+                  className="relative w-full overflow-hidden cursor-pointer group border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <Image
+                    src={img.image}
+                    alt={img.title || `${product.name} image ${idx + 1}`}
+                    width={1000} height={1000}
+                    className="object-cover"
+                  />
+                  
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Quality Standards Pillars */}
         <div className="mt-12 border-t border-slate-200/80 pt-10">
           <div className="text-center mb-8 space-y-1">
@@ -469,7 +433,7 @@ export default function ProductDetailPage() {
 
       {/* Fullscreen Lightbox Modal */}
       <AnimatePresence>
-        {lightboxOpen && activeImage && (
+        {lightboxOpen && images[lightboxIndex] && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -488,10 +452,35 @@ export default function ProductDetailPage() {
               <Image
                 width={1600}
                 height={1000}
-                src={activeImage}
-                alt={`${product.name} Full preview`}
+                src={images[lightboxIndex].image}
+                alt={`${product.name} preview ${lightboxIndex + 1}`}
                 className="w-full h-full object-contain"
               />
+
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/60 hover:bg-black/90 text-white rounded-full transition-colors border border-white/10 cursor-pointer"
+                    aria-label="Previous image"
+                  >
+                    <FiChevronLeft size={20} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxIndex((prev) => (prev + 1) % images.length);
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/60 hover:bg-black/90 text-white rounded-full transition-colors border border-white/10 cursor-pointer"
+                    aria-label="Next image"
+                  >
+                    <FiChevronRight size={20} />
+                  </button>
+                </>
+              )}
 
               <button
                 onClick={() => setLightboxOpen(false)}
