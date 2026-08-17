@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Loader from '@/app/Loader';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -115,12 +116,7 @@ export default function BoardMemberDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-[65vh] flex flex-col items-center justify-center space-y-3 p-6 text-slate-400">
-        <FiLoader className="animate-spin text-primary" size={28} />
-        <p className="text-sm font-medium">Loading board member details...</p>
-      </div>
-    );
+    return <Loader fullScreen={false} size="md" text="Loading board member details..." />;
   }
 
   if (!member) {

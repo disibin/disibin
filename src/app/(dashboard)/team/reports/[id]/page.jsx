@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Loader from '@/app/Loader';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -87,11 +88,7 @@ export default function ReportDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="p-12 text-center text-slate-400">
-        Loading report details...
-      </div>
-    );
+    return <Loader fullScreen={false} size="md" text="Loading report details..." />;
   }
 
   if (!report) return null;

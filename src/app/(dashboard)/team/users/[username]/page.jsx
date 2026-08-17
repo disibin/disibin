@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Loader from '@/app/Loader';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -48,12 +49,7 @@ export default function TeamUserProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-[65vh] flex flex-col items-center justify-center space-y-3 p-6 text-slate-400">
-        <FiLoader className="animate-spin text-primary" size={28} />
-        <p className="text-sm font-medium">Loading user profile by email/id...</p>
-      </div>
-    );
+    return <Loader fullScreen={false} size="md" text="Loading user profile..." />;
   }
 
   if (!profileData || !profileData.user) {

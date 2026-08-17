@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useContext } from 'react';
+import Loader from '@/app/Loader';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -62,27 +63,8 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full bg-slate-50/50 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-start">
-        <div className="w-full max-w-7xl mx-auto space-y-8 animate-pulse pt-4">
-          <div className="h-6 bg-primary/10 rounded-md w-36"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 bg-white/60 border border-primary/10 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="aspect-video bg-primary/10 rounded-2xl"></div>
-            </div>
-            <div className="lg:col-span-5 space-y-6 flex flex-col justify-between py-2">
-              <div className="space-y-4">
-                <div className="h-6 bg-primary/10 rounded-md w-28"></div>
-                <div className="h-10 bg-primary/10 rounded-md w-3/4"></div>
-                <div className="h-4 bg-slate-200 rounded-md w-full"></div>
-                <div className="h-4 bg-slate-200 rounded-md w-5/6"></div>
-              </div>
-              <div className="space-y-3">
-                <div className="h-12 bg-primary/10 rounded-xl w-full"></div>
-                <div className="h-12 bg-primary/10 rounded-xl w-full"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader size="md" text="Loading product details..." />
       </div>
     );
   }

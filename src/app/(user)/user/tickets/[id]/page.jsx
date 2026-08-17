@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Loader from '@/app/Loader';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -126,12 +127,7 @@ export default function UserTicketDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="py-16 flex flex-col items-center justify-center space-y-2 text-slate-400">
-        <FiLoader className="animate-spin text-primary" size={24} />
-        <p className="text-xs">Loading ticket...</p>
-      </div>
-    );
+    return <Loader fullScreen={false} size="md" text="Loading ticket..." />;
   }
 
   if (!thread || !thread.ticket) {
