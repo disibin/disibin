@@ -53,7 +53,7 @@ const Navbar = () => {
   return (
     <div className='w-full fixed top-0 px-3 z-50 pt-3'>
       <nav
-        className={`w-full bg-white flex items-center justify-between h-14 px-5 rounded-2xl transition-all duration-500 ${showTopbar ? 'translate-y-0 opacity-100' : '-translate-y-[120%] opacity-0'} `}
+        className={`w-full bg-tertiary-light flex items-center justify-between h-12 px-4 rounded-2xl transition-all duration-500 ${showTopbar ? 'translate-y-0 opacity-100' : '-translate-y-[120%] opacity-0'} `}
       >
         <Link
           href='/'
@@ -73,7 +73,6 @@ const Navbar = () => {
             </Link>
           ))}
 
-          <div className='ml-3 h-5 w-px bg-slate-200' />
 
           {isLoggedIn ? (
             <div className="relative" ref={dropdownRef}>
@@ -143,7 +142,7 @@ const Navbar = () => {
           ) : (
             <Link
               href='/auth/login'
-              className='ml-3 px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-all duration-300 shadow-sm'
+              className='ml-3 px-5 py-1 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-all duration-300 shadow-sm'
             >
               Login
             </Link>

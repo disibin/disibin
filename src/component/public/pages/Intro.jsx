@@ -36,7 +36,7 @@ const Intro = () => {
           <p className='font-poppins text-lg sm:text-xl tracking-wide'>
             We build technology
           </p>
-          <h1 className='font-poppins text-5xl sm:text-7xl lg:text-8xl font-semibold leading-[1.08] tracking-tight '>
+          <h1 className='font-poppins text-3xl sm:text-5xl lg:text-6xl font-semibold leading-[1.08] tracking-tight '>
             that{' '}
             <span className=''>works,</span>
             <br />
@@ -55,4 +55,4 @@ const Intro = () => {
   )
 }
 
-export default Intro
+export default Intro

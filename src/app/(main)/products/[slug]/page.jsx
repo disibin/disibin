@@ -94,15 +94,13 @@ export default function ProductDetailPage() {
             Back to Products
           </Link>
           <span className="text-slate-300">/</span>
-          <span className="text-slate-400 text-sm font-medium truncate max-w-[200px] sm:max-w-none">{product.name}</span>
+          <span className="text-slate-400 text-sm font-medium truncate max-w-50 sm:max-w-none">{product.name}</span>
         </div>
 
-        {/* Product Hero Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/50 p-6 sm:p-8 animate-fade-up">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12  p-2 animate-fade-up">
 
-          {/* Left Column: Primary Image */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-slate-100 bg-slate-900/5 shadow-inner group flex items-center justify-center">
+            <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-100 bg-slate-900/5 shadow-inner group flex items-center justify-center">
               {primaryImage ? (
                 <>
                   <Image
@@ -113,9 +111,8 @@ export default function ProductDetailPage() {
                     className="w-full h-full object-cover transition-all duration-500"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-900/20 to-transparent pointer-events-none" />
 
-                  {/* Expand Image Button */}
                   <button
                     onClick={() => {
                       const primaryIdx = images.findIndex((img) => img.is_primary);
@@ -139,7 +136,6 @@ export default function ProductDetailPage() {
 
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              {/* Featured Badge & Pricing Header */}
               <div className="flex items-center justify-between gap-3">
                 {product.is_featured && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/20 text-xs font-bold uppercase tracking-wider">
@@ -147,14 +143,13 @@ export default function ProductDetailPage() {
                   </span>
                 )}
 
-                {/* Price Tag */}
                 <div className="ml-auto flex items-baseline gap-2">
                   {discountAmount > 0 && (
                     <span className="text-slate-400 text-sm line-through font-semibold">
                       ${originalPrice.toLocaleString()}
                     </span>
                   )}
-                  <span className="text-3xl font-extrabold text-slate-900">
+                  <span className="text-3xl font-semibold text-slate-900">
                     {finalPrice > 0 ? `$${finalPrice.toLocaleString()}` : 'Free / Contact'}
                   </span>
                   {discountAmount > 0 && (
@@ -165,11 +160,10 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-2xl font-semibold text-slate-900 tracking-tight leading-tight">
                 {product.name}
               </h1>
 
-              {/* Core Features Highlights */}
               {product.features && product.features.length > 0 && (
                 <div className="pt-4 space-y-2.5 border-t border-slate-100">
                   <h3 className="text-xs font-bold text-primary/70 uppercase tracking-widest">Key Highlights</h3>
@@ -187,14 +181,13 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            {/* Action Buttons */}
             <div className="space-y-3 pt-6 border-t border-slate-100">
               {product.demo_url && (
                 <a
                   href={product.demo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary-dark text-white font-bold py-3.5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group shadow-md shadow-primary/20"
+                  className="w-full bg-primary text-white font-bold py-1 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group"
                 >
                   <FiExternalLink className="group-hover:scale-105 transition-transform" size={16} />
                   Launch Live Product Demo
@@ -204,7 +197,7 @@ export default function ProductDetailPage() {
               {isLoggedIn ? (
                 <Link
                   href="/user/tickets"
-                  className="w-full bg-secondary hover:bg-secondary-dark text-white font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-secondary/20"
+                  className="w-full bg-secondary text-white font-bold py-1 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group"
                 >
                   <FiShoppingCart size={16} />
                   Request Custom Implementation
@@ -212,7 +205,7 @@ export default function ProductDetailPage() {
               ) : (
                 <Link
                   href="/contact"
-                  className="w-full bg-secondary hover:bg-secondary-dark text-white font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-secondary/20"
+                  className="w-full bg-secondary text-white font-bold py-1 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group"
                 >
                   <FiMessageSquare size={16} />
                   Inquire Support & Purchase
@@ -222,9 +215,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Tabbed Detailed Specifications */}
         <div className="mt-10 w-full animate-fade-in">
-          {/* Tab Navigation */}
           <div className="flex border-b border-slate-200 gap-6 sm:gap-8 mb-6 overflow-x-auto">
             {[
               { id: 'overview', label: 'Product Overview', icon: <FiBookOpen size={16} /> },
@@ -251,7 +242,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="min-h-[200px]">
+          <div className="min-h-50">
             <AnimatePresence mode="wait">
               {activeTab === 'overview' && (
                 <motion.div
@@ -262,7 +253,7 @@ export default function ProductDetailPage() {
                   transition={{ duration: 0.2 }}
                   className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4"
                 >
-                  <h3 className="text-xl font-extrabold text-slate-900">About {product.name}</h3>
+                  <h3 className="text-xl font-semibold text-slate-900">About {product.name}</h3>
                   {product.description ? (
                     <div
                       className="prose prose-slate max-w-none prose-p:leading-relaxed text-sm text-slate-700 whitespace-pre-wrap"
@@ -283,7 +274,7 @@ export default function ProductDetailPage() {
                   transition={{ duration: 0.2 }}
                   className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6"
                 >
-                  <h3 className="text-xl font-extrabold text-slate-900">Technical Features & Specifications</h3>
+                  <h3 className="text-xl font-semibold text-slate-900">Technical Features & Specifications</h3>
                   {product.features && product.features.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {product.features.map((feature, idx) => (
@@ -295,7 +286,7 @@ export default function ProductDetailPage() {
                             <FiCheck size={16} />
                           </div>
                           <div>
-                            <h4 className="font-extrabold text-slate-900 text-sm">{feature.name}</h4>
+                            <h4 className="font-semibold text-slate-900 text-sm">{feature.name}</h4>
                             <p className="text-xs text-slate-500 mt-1 leading-relaxed">{feature.description || 'Pre-configured core module'}</p>
                           </div>
                         </div>
@@ -318,7 +309,7 @@ export default function ProductDetailPage() {
                 >
                   <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
                     <div className="space-y-2">
-                      <h3 className="text-xl font-extrabold">Technical Support & Guidance</h3>
+                      <h3 className="text-xl font-semibold">Technical Support & Guidance</h3>
                       <p className="text-xs text-slate-300 leading-relaxed">
                         Need assistance with product configuration, deployment, or custom integration? Our team is here to assist.
                       </p>
@@ -326,7 +317,7 @@ export default function ProductDetailPage() {
 
                     <Link
                       href={isLoggedIn ? "/user/tickets" : "/contact"}
-                      className="inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-primary hover:bg-primary-dark text-white font-extrabold text-xs rounded-xl transition-all shadow-md shadow-primary/20"
+                      className="inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-primary hover:bg-primary-dark text-white font-semibold text-xs rounded-xl transition-all shadow-md shadow-primary/20"
                     >
                       <FiMessageSquare size={14} />
                       {isLoggedIn ? "Open Support Ticket" : "Contact Sales & Support"}
@@ -341,7 +332,7 @@ export default function ProductDetailPage() {
         {images.length > 0 && (
           <div className="mt-12 border-t border-slate-200/80 pt-10 animate-fade-in">
             <div className="mb-6">
-              <h2 className="text-2xl font-extrabold text-slate-900">Product Gallery</h2>
+              <h2 className="text-2xl font-semibold text-slate-900">Product Gallery</h2>
               <p className="text-xs text-slate-500 mt-1">All preview screenshots and images</p>
             </div>
 
@@ -371,7 +362,7 @@ export default function ProductDetailPage() {
         {/* Quality Standards Pillars */}
         <div className="mt-12 border-t border-slate-200/80 pt-10">
           <div className="text-center mb-8 space-y-1">
-            <h2 className="text-2xl font-extrabold text-slate-900">Built to Professional Standards</h2>
+            <h2 className="text-2xl font-semibold text-slate-900">Built to Professional Standards</h2>
             <p className="text-xs text-slate-500">Engineered for durability, speed, and enterprise security</p>
           </div>
 
@@ -400,7 +391,7 @@ export default function ProductDetailPage() {
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${pillar.bg}`}>
                   {pillar.icon}
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm">{pillar.title}</h4>
+                <h4 className="font-semibold text-slate-900 text-sm">{pillar.title}</h4>
                 <p className="text-slate-500 text-xs leading-relaxed">{pillar.desc}</p>
               </div>
             ))}
