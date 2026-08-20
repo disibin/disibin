@@ -19,8 +19,8 @@ export async function GET() {
                 pur.discount, 
                 pur.status as purchase_status, 
                 pur.created_at,
-                prod.title as product_title, 
-                prod.image as product_image, 
+                prod.name as product_title, 
+                pimg.image as product_image, 
                 prod.slug as product_slug,
                 proj.title as project_title,
                 pay.id as payment_id, 
@@ -30,6 +30,7 @@ export async function GET() {
                 pay.status as payment_status
             FROM purchases pur
             LEFT JOIN products prod ON pur.product_id = prod.id
+            LEFT JOIN product_images pimg ON pimg.product_id = prod.id AND pimg.is_primary = true
             LEFT JOIN projects proj ON pur.project_id = proj.id
             LEFT JOIN payments pay ON pur.id = pay.purchase_id
             WHERE proj.user_id = $1

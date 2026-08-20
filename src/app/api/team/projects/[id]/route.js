@@ -14,10 +14,11 @@ export async function GET(req, { params }) {
 
         const projectRes = await dbQuery(`
             SELECT p.id, p.title, p.product_id, p.user_id, p.team_id, p.status, p.created_at, p.updated_at,
-                   prod.name as product_name, prod.slug as product_slug, prod.price as product_price,
+                   prod.name as product_name, prod.slug as product_slug, pp.price as product_price,
                    u.name as user_name, u.email as user_email, u.phone as user_phone
             FROM projects p
             LEFT JOIN products prod ON p.product_id = prod.id
+            LEFT JOIN product_prices pp ON pp.product_id = prod.id
             LEFT JOIN users u ON p.user_id = u.id
             WHERE p.id = $1
         `, [projectId]);

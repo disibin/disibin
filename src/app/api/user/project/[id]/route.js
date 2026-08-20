@@ -16,11 +16,12 @@ export async function GET(req, { params }) {
         // Fetch project
         const projectRes = await dbQuery(`
             SELECT p.id, p.title, p.product_id, p.user_id, p.status, p.created_at, p.updated_at,
-                   prod.name as product_name, prod.slug as product_slug, prod.price as product_price, prod.demo_url
+                   prod.name as product_name, prod.slug as product_slug, pp.price as product_price, prod.demo_url
             FROM projects p
             LEFT JOIN products prod ON p.product_id = prod.id
+            LEFT JOIN product_prices pp ON pp.product_id = prod.id
             WHERE p.id = $1 AND (p.user_id = $2 OR EXISTS (
-                SELECT 1 FROM project_participants pp WHERE pp.project_id = p.id AND pp.user_id = $2
+                SELECT 1 FROM project_participants pp2 WHERE pp2.project_id = p.id AND pp2.user_id = $2
             ))
         `, [projectId, userId]);
 

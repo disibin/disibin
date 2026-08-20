@@ -21,7 +21,7 @@ export async function GET() {
                 pur.product_id,
                 pur.project_id,
                 pur.status as purchase_status,
-                prod.title as product_title,
+                prod.name as product_title,
                 proj.title as project_title,
                 u.id as user_id,
                 u.name as user_name,
