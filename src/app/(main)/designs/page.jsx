@@ -74,7 +74,7 @@ export default function DesignsPage() {
   };
 
   return (
-    <div className="min-h-screen  pb-16 px-4 sm:px-6 w-full">
+    <div className="min-h-screen  pb-16 pt-24 px-4 sm:px-6 w-full">
       
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">

@@ -9,7 +9,13 @@ const ProductCard = ({ product }) => {
     product?.images?.find((img) => img.is_primary)?.image ||
     product?.images?.[0]?.image;
 
-  const finalPrice = product?.price != null ? product.price - (product.discount || 0) : null;
+  // Extract pricing from product.prices object or fallback top-level properties
+  const priceObj = product?.prices || {};
+  const price = Number(product?.price ?? priceObj.price) || 0;
+  const discount = Number(product?.discount ?? priceObj.discount) || 0;
+  const setupFee = Number(product?.setup_fee ?? priceObj.setup_fee) || 0;
+
+  const finalPrice = Math.max(0, price - discount);
 
   return (
     <motion.div
@@ -21,15 +27,16 @@ const ProductCard = ({ product }) => {
     >
       <Link
         href={`/products/${product?.slug}`}
-        className="group flex flex-col w-full bg-white border border-slate-200/80 rounded-sm overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+        className="group flex flex-col w-full bg-white border border-slate-200/80 rounded-xl overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-full"
       >
         <div className="relative w-full aspect-video overflow-hidden bg-slate-100">
           {primaryImage ? (
             <Image
               src={primaryImage}
               alt={product?.name || 'Product'}
-              width={500} height={500}
-              className="w-full "
+              width={500}
+              height={500}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm font-poppins">
@@ -38,36 +45,37 @@ const ProductCard = ({ product }) => {
           )}
 
           {product?.is_featured && (
-            <span className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-xs font-poppins">
+            <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs font-poppins">
               Featured
             </span>
           )}
         </div>
 
-        <div className="p-2 flex flex-col justify-between grow gap-3">
-          <h2 className="font-semibold text-primary group-hover:text-secondary transition-colors font-poppins line-clamp-2">
+        <div className="p-4 flex flex-col justify-between grow gap-3">
+          <h2 className="font-semibold text-slate-900 group-hover:text-primary transition-colors font-poppins line-clamp-2 text-base">
             {product?.name}
           </h2>
 
-          {finalPrice != null && (
-            <div className="flex items-baseline justify-between p-2 border-t border-slate-100 mt-auto">
+          <div className="flex flex-col gap-1.5 pt-3 border-t border-slate-100 mt-auto">
+            <div className="flex items-center justify-between">
               <div className="flex items-baseline gap-2">
-                <span className=" font-semibold text-slate-900 font-poppins">
+                <span className="text-lg font-bold text-slate-900 font-poppins">
                   ${finalPrice}
                 </span>
-                {product?.discount > 0 && (
-                  <span className="text-xs sm:text-sm text-slate-400 line-through font-poppins">
-                    ${product.price}
+                {discount > 0 && (
+                  <span className="text-xs text-slate-400 line-through font-poppins">
+                    ${price}
                   </span>
                 )}
               </div>
-              {product?.discount > 0 && (
-                <span className="text-xs font-semibold bg-primary-light text-tertiary-light px-2 py-0.5 rounded-full font-poppins">
-                  ${product.discount} OFF
+
+              {discount > 0 && (
+                <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60 px-2 py-0.5 rounded-md font-poppins">
+                  ${discount} OFF
                 </span>
               )}
             </div>
-          )}
+          </div>
         </div>
       </Link>
     </motion.div>
@@ -75,3 +83,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { FiPlus, FiTrash2, FiCheck, FiX, FiZap, FiImage, FiSave, FiEye } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiCheck, FiX, FiZap, FiImage, FiSave, FiEye, FiYoutube, FiVideo } from 'react-icons/fi';
 import ImageUpload from '@/component/helper/ImageUpload';
 import TiptapEditor from '../helper/TiptapEditor';
 import Image from 'next/image';
@@ -43,7 +43,7 @@ function CreateFeatureModal({ onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-3 space-y-5 border border-slate-100">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-4 space-y-4 border border-slate-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-semibold">
@@ -114,8 +114,10 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
     name: '',
     description: '',
     demo_url: '',
-    price: 0,
-    discount: 0,
+    price: initialData?.price ?? initialData?.prices?.price ?? 0,
+    discount: initialData?.discount ?? initialData?.prices?.discount ?? 0,
+    setup_fee: initialData?.setup_fee ?? initialData?.prices?.setup_fee ?? 0,
+    service_charge: initialData?.service_charge ?? initialData?.prices?.service_charge ?? 0,
     is_featured: false,
     is_published: false,
     ...initialData,
@@ -129,6 +131,11 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
   const [selectedIds, setSelectedIds] = useState(
     new Set((initialData?.features || []).map(f => f.id))
   );
+
+  const [videos, setVideos] = useState(
+    (initialData?.videos || []).map(v => (typeof v === 'string' ? { url: v } : { id: v.id || null, url: v.url || '' }))
+  );
+  const [newVideoUrl, setNewVideoUrl] = useState('');
 
   const [images, setImages] = useState(
     (initialData?.images || []).map(img => ({
@@ -176,6 +183,16 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
   const handleFeatureCreated = (newFeature) => {
     setAvailableFeatures(prev => [...prev, newFeature].sort((a, b) => a.name.localeCompare(b.name)));
     setSelectedIds(prev => new Set([...prev, newFeature.id]));
+  };
+
+  const handleAddVideo = () => {
+    if (!newVideoUrl.trim()) return;
+    setVideos(prev => [...prev, { url: newVideoUrl.trim() }]);
+    setNewVideoUrl('');
+  };
+
+  const handleRemoveVideo = (index) => {
+    setVideos(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleImageUpload = (imageData) => {
@@ -230,10 +247,13 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
         demo_url: formData.demo_url || null,
         price: Number(formData.price) || 0,
         discount: Number(formData.discount) || 0,
+        setup_fee: Number(formData.setup_fee) || 0,
+        service_charge: Number(formData.service_charge) || 0,
         is_featured: formData.is_featured,
         is_published: publishStatus,
         images,
         features: featuresPayload,
+        videos: videos.map(v => v.url).filter(Boolean),
       };
 
       const res = await axios[method](url, payload);
@@ -283,31 +303,67 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Regular Price ($)</label>
-                  <input
-                    type="number"
-                    name="price"
-                    min="0"
-                    value={formData.price}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="0"
-                  />
-                </div>
+              {/* Pricing & Fees Grid */}
+              <div className="space-y-3 pt-2">
+                <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Pricing & Fees (product_prices)</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">Regular Price ($)</label>
+                    <input
+                      type="number"
+                      name="price"
+                      min="0"
+                      step="any"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="0"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Discount ($)</label>
-                  <input
-                    type="number"
-                    name="discount"
-                    min="0"
-                    value={formData.discount}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-emerald-600 focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="0"
-                  />
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">Discount ($)</label>
+                    <input
+                      type="number"
+                      name="discount"
+                      min="0"
+                      step="any"
+                      value={formData.discount}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-emerald-600 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="0"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">Setup Fee ($)</label>
+                    <input
+                      type="number"
+                      name="setup_fee"
+                      min="0"
+                      step="any"
+                      value={formData.setup_fee}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="0"
+                    />
+                    <span className="text-[10px] text-slate-400 font-normal block mt-1">Domain &amp; Hosting cost</span>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">Service Charge ($)</label>
+                    <input
+                      type="number"
+                      name="service_charge"
+                      min="0"
+                      step="any"
+                      value={formData.service_charge}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="0"
+                    />
+                    <span className="text-[10px] text-slate-400 font-normal block mt-1">Maintenance fee (after every year)</span>
+                  </div>
                 </div>
               </div>
 
@@ -322,6 +378,57 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
                   placeholder="https://demo.example.com"
                 />
               </div>
+            </div>
+
+            {/* YouTube Videos Section (product_videos) */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FiYoutube className="w-5 h-5 text-red-600" />
+                  <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Product Videos (YouTube Links)</h3>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-400 font-poppins">{videos.length} Added</span>
+              </div>
+
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={newVideoUrl}
+                  onChange={e => setNewVideoUrl(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddVideo(); } }}
+                  className="flex-1 px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                <button
+                  type="button"
+                  onClick={handleAddVideo}
+                  disabled={!newVideoUrl.trim()}
+                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors disabled:opacity-50 flex items-center gap-1 shrink-0"
+                >
+                  <FiPlus size={14} />
+                  Add Video
+                </button>
+              </div>
+
+              {videos.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  {videos.map((vid, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200/80 rounded-lg text-xs">
+                      <div className="flex items-center gap-2 overflow-hidden truncate">
+                        <FiVideo className="text-red-500 shrink-0" size={14} />
+                        <span className="font-medium text-slate-800 truncate">{vid.url}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveVideo(idx)}
+                        className="text-slate-400 hover:text-red-600 p-1 transition-colors shrink-0"
+                      >
+                        <FiTrash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Description Card */}
@@ -359,139 +466,144 @@ const ProductForm = ({ initialData, onSuccess, onCancel }) => {
               </div>
             </div>
 
+            {/* Product Gallery Card */}
             <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Product Gallery</h3>
-                <span className="text-xs font-semibold text-slate-500">{images.length} Image{images.length !== 1 ? 's' : ''}</span>
+                <span className="text-[11px] font-semibold text-slate-400 font-poppins">{images.length} Loaded</span>
               </div>
 
-              <ImageUpload onUpload={handleImageUpload} label="Upload Image" />
+              <ImageUpload
+                onUploadComplete={handleImageUpload}
+                folder="products"
+              />
 
               {images.length > 0 && (
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                  {images.map((img, index) => (
-                    <div key={index} className="relative group rounded-lg overflow-hidden border border-slate-200 bg-slate-50 aspect-video">
-                      <Image width={500} height={500} src={img.image} alt="Product preview" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSetPrimary(index)}
-                          className={`p-1.5 rounded-lg text-xs font-semibold ${img.is_primary ? 'bg-emerald-500 text-white' : 'bg-white text-slate-800 hover:bg-emerald-500 hover:text-white'} transition-colors`}
-                          title={img.is_primary ? 'Primary Image' : 'Set as Primary'}
-                        >
-                          <FiCheck size={13} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(index)}
-                          className="p-1.5 rounded-lg bg-white text-slate-800 hover:bg-rose-500 hover:text-white transition-colors"
-                          title="Remove Image"
-                        >
-                          <FiTrash2 size={13} />
-                        </button>
+                  {images.map((img, idx) => (
+                    <div
+                      key={idx}
+                      className={`relative group rounded-xl overflow-hidden border-2 transition-all ${
+                        img.is_primary ? 'border-primary shadow-sm' : 'border-slate-100 hover:border-slate-200'
+                      }`}
+                    >
+                      <div className="aspect-video relative bg-slate-100">
+                        <Image
+                          src={img.image}
+                          alt={img.title || 'Product image'}
+                          fill
+                          className="object-cover"
+                        />
                       </div>
-                      {img.is_primary && (
-                        <div className="absolute top-1.5 left-1.5 bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded-md font-semibold">
-                          Primary
+
+                      <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                        <div className="flex justify-between items-start">
+                          {img.is_primary ? (
+                            <span className="bg-primary text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                              Primary
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleSetPrimary(idx)}
+                              className="bg-white/90 hover:bg-white text-slate-800 text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-xs transition-colors"
+                            >
+                              Make Primary
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-colors ml-auto"
+                          >
+                            <FiTrash2 size={12} />
+                          </button>
                         </div>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Included Features Selection */}
-            <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-xs space-y-4">
-              <div className="flex items-center justify-between gap-2">
+            {/* Feature Checklist Card */}
+            <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Features Included</h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{selectedIds.size} feature{selectedIds.size !== 1 ? 's' : ''} selected</p>
+                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Feature Tags</h3>
+                  <p className="text-[11px] text-slate-500 font-poppins">Select all capabilities that apply</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowModal(true)}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-primary transition-colors"
+                  className="px-2.5 py-1 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
                 >
-                  <FiPlus size={13} /> Add New
+                  <FiPlus size={13} />
+                  New Tag
                 </button>
               </div>
 
-              {availableFeatures.length > 0 && (
-                <input
-                  type="text"
-                  placeholder="Search features..."
-                  value={featureSearch}
-                  onChange={(e) => setFeatureSearch(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              )}
+              <input
+                type="text"
+                value={featureSearch}
+                onChange={e => setFeatureSearch(e.target.value)}
+                className="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+                placeholder="Search feature tags..."
+              />
 
-              {featuresLoading ? (
-                <div className="py-6 text-center text-xs text-slate-400">Loading feature tags...</div>
-              ) : availableFeatures.length === 0 ? (
-                <div className="py-6 text-center text-xs text-slate-400">No feature tags created yet.</div>
-              ) : (
-                <div className="flex flex-wrap gap-1.5 max-h-56 overflow-y-auto pr-1">
-                  {availableFeatures
-                    .filter(f => f.name.toLowerCase().includes((featureSearch || '').toLowerCase()))
-                    .map(feature => {
-                      const selected = selectedIds.has(feature.id);
+              <div className="max-h-56 overflow-y-auto space-y-1 pr-1">
+                {featuresLoading ? (
+                  <p className="text-xs text-slate-400 p-2">Loading tags...</p>
+                ) : (
+                  availableFeatures
+                    .filter(f => !featureSearch || f.name.toLowerCase().includes(featureSearch.toLowerCase()))
+                    .map(f => {
+                      const active = selectedIds.has(f.id);
                       return (
-                        <button
-                          key={feature.id}
-                          type="button"
-                          onClick={() => toggleFeature(feature.id)}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
-                            selected
-                              ? 'bg-primary/10 border-primary/30 text-primary-dark font-semibold shadow-2xs'
-                              : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                        <div
+                          key={f.id}
+                          onClick={() => toggleFeature(f.id)}
+                          className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${
+                            active
+                              ? 'bg-primary/5 border-primary/30 text-primary font-semibold'
+                              : 'bg-slate-50/50 border-slate-100 hover:bg-slate-100/80 text-slate-700'
                           }`}
                         >
-                          <span className={`w-3.5 h-3.5 rounded-md flex items-center justify-center text-[10px] ${selected ? 'bg-primary text-white' : 'border border-slate-300'}`}>
-                            {selected && <FiCheck size={10} />}
-                          </span>
-                          {feature.name}
-                        </button>
+                          <span className="text-xs font-poppins truncate">{f.name}</span>
+                          <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
+                            active ? 'bg-primary border-primary text-white' : 'border-slate-300 bg-white'
+                          }`}>
+                            {active && <FiCheck size={11} />}
+                          </div>
+                        </div>
                       );
-                    })}
-                </div>
-              )}
+                    })
+                )}
+              </div>
+            </div>
+
+            {/* Submit Action Controls */}
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => submitForm(false)}
+                disabled={loading}
+                className="flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                <FiSave size={14} />
+                Save Draft
+              </button>
+              <button
+                type="button"
+                onClick={() => submitForm(true)}
+                disabled={loading}
+                className="flex-1 py-2.5 px-4 bg-primary hover:bg-primary-dark text-white font-semibold text-xs rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                <FiEye size={14} />
+                Publish Product
+              </button>
             </div>
           </div>
-        </div>
-
-        {/* Action Buttons Footer */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-200/80">
-          {onCancel && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-5 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-semibold hover:bg-slate-100 transition-colors text-xs"
-            >
-              Cancel
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => submitForm(false)}
-            disabled={loading}
-            className="px-5 py-2.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition-colors text-xs disabled:opacity-50 flex items-center gap-1.5"
-          >
-            <FiSave size={14} />
-            {formData.is_published ? 'Save as Draft' : 'Save Draft'}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => submitForm(true)}
-            disabled={loading}
-            className="px-6 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark transition-colors text-xs disabled:opacity-50 shadow-md shadow-primary/20 flex items-center gap-1.5"
-          >
-            <FiEye size={14} />
-            {loading ? 'Saving...' : formData.is_published ? 'Save Changes' : 'Publish Product'}
-          </button>
         </div>
       </form>
     </>

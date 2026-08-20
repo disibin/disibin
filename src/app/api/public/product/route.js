@@ -11,12 +11,35 @@ export async function GET() {
                 p.slug,
                 p.description,
                 p.demo_url,
-                p.price,
-                p.discount,
                 p.is_featured,
                 p.is_published,
                 p.created_at,
                 p.updated_at,
+                COALESCE(pp.setup_fee, 0) AS setup_fee,
+                COALESCE(pp.price, 0) AS price,
+                COALESCE(pp.service_charge, 0) AS service_charge,
+                COALESCE(pp.discount, 0) AS discount,
+                COALESCE(
+                    (SELECT json_build_object(
+                        'id', pp2.id,
+                        'setup_fee', COALESCE(pp2.setup_fee, 0),
+                        'price', COALESCE(pp2.price, 0),
+                        'service_charge', COALESCE(pp2.service_charge, 0),
+                        'discount', COALESCE(pp2.discount, 0)
+                    ) FROM product_prices pp2 WHERE pp2.product_id = p.id LIMIT 1),
+                    json_build_object('id', null, 'setup_fee', 0, 'price', 0, 'service_charge', 0, 'discount', 0)
+                ) AS prices,
+                COALESCE(
+                    (SELECT json_agg(
+                        json_build_object(
+                            'id', pv.id,
+                            'url', pv.url
+                        ) ORDER BY pv.id ASC
+                    )
+                    FROM product_videos pv
+                    WHERE pv.product_id = p.id),
+                    '[]'::json
+                ) AS videos,
                 COALESCE(
                     (SELECT json_agg(
                         json_build_object(
@@ -48,6 +71,7 @@ export async function GET() {
                     '[]'::json
                 ) AS features
             FROM products p
+            LEFT JOIN product_prices pp ON pp.product_id = p.id
             WHERE p.is_published = true
             ORDER BY p.created_at DESC
         `);

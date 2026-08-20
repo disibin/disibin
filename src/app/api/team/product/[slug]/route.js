@@ -18,13 +18,36 @@ export async function GET(req, { params }) {
                 p.slug,
                 p.description,
                 p.demo_url,
-                p.price,
-                p.discount,
                 p.is_featured,
                 p.is_published,
                 p.created_by,
                 p.created_at,
                 p.updated_at,
+                COALESCE(pp.setup_fee, 0) AS setup_fee,
+                COALESCE(pp.price, 0) AS price,
+                COALESCE(pp.service_charge, 0) AS service_charge,
+                COALESCE(pp.discount, 0) AS discount,
+                COALESCE(
+                    (SELECT json_build_object(
+                        'id', pp2.id,
+                        'setup_fee', COALESCE(pp2.setup_fee, 0),
+                        'price', COALESCE(pp2.price, 0),
+                        'service_charge', COALESCE(pp2.service_charge, 0),
+                        'discount', COALESCE(pp2.discount, 0)
+                    ) FROM product_prices pp2 WHERE pp2.product_id = p.id LIMIT 1),
+                    json_build_object('id', null, 'setup_fee', 0, 'price', 0, 'service_charge', 0, 'discount', 0)
+                ) AS prices,
+                COALESCE(
+                    (SELECT json_agg(
+                        json_build_object(
+                            'id', pv.id,
+                            'url', pv.url
+                        ) ORDER BY pv.id ASC
+                    )
+                    FROM product_videos pv
+                    WHERE pv.product_id = p.id),
+                    '[]'::json
+                ) AS videos,
                 COALESCE(
                     (SELECT json_agg(
                         json_build_object(
@@ -50,6 +73,7 @@ export async function GET(req, { params }) {
                     '[]'::json
                 ) AS features
             FROM products p
+            LEFT JOIN product_prices pp ON pp.product_id = p.id
             WHERE p.slug = $1
             LIMIT 1
         `, [slug]);
@@ -72,7 +96,11 @@ export async function PUT(req, { params }) {
 
         const { slug } = await params;
         const body = await req.json();
-        const { name, description, demo_url, price, discount, is_featured, is_published, images, features } = body;
+        const {
+            name, description, demo_url,
+            price, discount, setup_fee, service_charge,
+            is_featured, is_published, images, features, videos
+        } = body;
 
         if (!name || !name.trim()) {
             return NextResponse.json({ success: false, message: "Product name is required" }, { status: 400 });
@@ -108,26 +136,54 @@ export async function PUT(req, { params }) {
                 }
             }
 
-            // Update core product fields including slug
+            // Update core product fields
             const productRes = await client.query(`
                 UPDATE products
                 SET name = $1, slug = $2, description = $3, demo_url = $4,
-                    price = $5, discount = $6, is_featured = $7, is_published = $8, updated_at = now()
-                WHERE id = $9
+                    is_featured = $5, is_published = $6, updated_at = now()
+                WHERE id = $7
                 RETURNING *
             `, [
                 newNameTrimmed,
                 newSlug,
                 description || null,
                 demo_url || null,
-                Number(price) || 0,
-                Number(discount) || 0,
                 is_featured !== undefined ? is_featured : true,
                 is_published !== undefined ? is_published : false,
                 productId
             ]);
 
             const prod = productRes.rows[0];
+
+            // Upsert product_prices
+            await client.query(`
+                INSERT INTO product_prices (product_id, setup_fee, price, service_charge, discount)
+                VALUES ($1, $2, $3, $4, $5)
+                ON CONFLICT (product_id) DO UPDATE SET
+                    setup_fee = EXCLUDED.setup_fee,
+                    price = EXCLUDED.price,
+                    service_charge = EXCLUDED.service_charge,
+                    discount = EXCLUDED.discount
+            `, [
+                productId,
+                Number(setup_fee) || 0,
+                Number(price) || 0,
+                Number(service_charge) || 0,
+                Number(discount) || 0
+            ]);
+
+            // Sync product_videos: delete existing, insert updated
+            if (videos && Array.isArray(videos)) {
+                await client.query("DELETE FROM product_videos WHERE product_id = $1", [productId]);
+                for (const vid of videos) {
+                    const videoUrl = typeof vid === 'string' ? vid : vid.url;
+                    if (!videoUrl || !videoUrl.trim()) continue;
+                    await client.query(`
+                        INSERT INTO product_videos (product_id, url)
+                        VALUES ($1, $2)
+                    `, [productId, videoUrl.trim()]);
+                }
+            }
 
             // Sync images: delete removed, insert new
             if (images && Array.isArray(images)) {
@@ -151,7 +207,7 @@ export async function PUT(req, { params }) {
                     }
                 }
 
-                // Update is_primary for existing images
+                // Update is_primary or insert new images
                 for (const img of images) {
                     if (img.id) {
                         await client.query(
@@ -159,7 +215,6 @@ export async function PUT(req, { params }) {
                             [img.is_primary || false, img.title || prod.name, img.id, productId]
                         );
                     } else {
-                        // Insert new images
                         if (!img.image || !img.public_id) continue;
                         await client.query(`
                             INSERT INTO product_images (title, image, public_id, product_id, is_primary)
@@ -229,10 +284,14 @@ export async function PUT(req, { params }) {
             }
 
             // Log action
-            await client.query(`
-                INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
-                VALUES ($1, $2, $3, $4, $5)
-            `, [auth.data.id, 'UPDATE', 'product', productId, `Updated product: ${prod.name}`]);
+            try {
+                await client.query(`
+                    INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
+                    VALUES ($1, $2, $3, $4, $5)
+                `, [auth.data.id, 'UPDATE', 'product', productId, `Updated product: ${prod.name}`]);
+            } catch (err) {
+                // Ignore activity log error
+            }
 
             return prod;
         });
@@ -248,7 +307,7 @@ export async function PUT(req, { params }) {
     }
 }
 
-// DELETE product by slug (Manager only) — cascades to product_images
+// DELETE product by slug (Manager only) — cascades to product_prices, product_videos, product_images
 export async function DELETE(req, { params }) {
     try {
         const auth = await isManager();
@@ -256,7 +315,7 @@ export async function DELETE(req, { params }) {
 
         const { slug } = await params;
 
-        // Fetch all images to delete from Cloudinary
+        // Fetch product and images to destroy on Cloudinary
         const productRes = await dbQuery(`
             SELECT p.id, p.name, pi.public_id
             FROM products p
@@ -271,7 +330,7 @@ export async function DELETE(req, { params }) {
         const productId = productRes.rows[0].id;
         const productName = productRes.rows[0].name;
 
-        // Delete from Cloudinary before DB deletion
+        // Delete from Cloudinary
         const publicIds = productRes.rows
             .map(r => r.public_id)
             .filter(Boolean);
@@ -284,14 +343,18 @@ export async function DELETE(req, { params }) {
             }
         }
 
-        // Delete product (cascades to product_images and product_features)
+        // Delete product (cascades to product_prices, product_videos, product_images, product_features)
         await dbQuery("DELETE FROM products WHERE id = $1", [productId]);
 
         // Log action
-        await dbQuery(`
-            INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
-            VALUES ($1, $2, $3, $4, $5)
-        `, [auth.data.id, 'DELETE', 'product', productId, `Deleted product: ${productName}`]);
+        try {
+            await dbQuery(`
+                INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
+                VALUES ($1, $2, $3, $4, $5)
+            `, [auth.data.id, 'DELETE', 'product', productId, `Deleted product: ${productName}`]);
+        } catch (err) {
+            // Ignore activity log error
+        }
 
         return NextResponse.json({ success: true, message: "Product deleted successfully" });
 

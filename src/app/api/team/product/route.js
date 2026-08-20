@@ -15,13 +15,36 @@ export async function GET() {
                 p.slug,
                 p.description,
                 p.demo_url,
-                p.price,
-                p.discount,
                 p.is_featured,
                 p.is_published,
                 p.created_by,
                 p.created_at,
                 p.updated_at,
+                COALESCE(pp.setup_fee, 0) AS setup_fee,
+                COALESCE(pp.price, 0) AS price,
+                COALESCE(pp.service_charge, 0) AS service_charge,
+                COALESCE(pp.discount, 0) AS discount,
+                COALESCE(
+                    (SELECT json_build_object(
+                        'id', pp2.id,
+                        'setup_fee', COALESCE(pp2.setup_fee, 0),
+                        'price', COALESCE(pp2.price, 0),
+                        'service_charge', COALESCE(pp2.service_charge, 0),
+                        'discount', COALESCE(pp2.discount, 0)
+                    ) FROM product_prices pp2 WHERE pp2.product_id = p.id LIMIT 1),
+                    json_build_object('id', null, 'setup_fee', 0, 'price', 0, 'service_charge', 0, 'discount', 0)
+                ) AS prices,
+                COALESCE(
+                    (SELECT json_agg(
+                        json_build_object(
+                            'id', pv.id,
+                            'url', pv.url
+                        ) ORDER BY pv.id ASC
+                    )
+                    FROM product_videos pv
+                    WHERE pv.product_id = p.id),
+                    '[]'::json
+                ) AS videos,
                 COALESCE(
                     (SELECT json_agg(
                         json_build_object(
@@ -47,6 +70,7 @@ export async function GET() {
                     '[]'::json
                 ) AS features
             FROM products p
+            LEFT JOIN product_prices pp ON pp.product_id = p.id
             ORDER BY p.created_at DESC
         `);
 
@@ -63,7 +87,11 @@ export async function POST(req) {
         if (!auth.success) return NextResponse.json(auth, { status: 403 });
 
         const body = await req.json().catch(() => ({}));
-        const { name, description, demo_url, price, discount, is_featured, is_published, images, features } = body;
+        const {
+            name, description, demo_url,
+            price, discount, setup_fee, service_charge,
+            is_featured, is_published, images, features, videos
+        } = body;
 
         const productName = (name && name.trim()) ? name.trim() : "enter title";
 
@@ -81,24 +109,51 @@ export async function POST(req) {
                 slug = `${baseSlug}-${counter++}`;
             }
 
-            // Insert product
+            // Insert core product
             const productRes = await client.query(`
-                INSERT INTO products (name, slug, description, demo_url, price, discount, is_featured, is_published, created_by)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                INSERT INTO products (name, slug, description, demo_url, is_featured, is_published, created_by)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *
             `, [
                 productName,
                 slug,
                 description || null,
                 demo_url || null,
-                Number(price) || 0,
-                Number(discount) || 0,
                 is_featured !== undefined ? is_featured : false,
                 is_published !== undefined ? is_published : false,
                 auth.data.id
             ]);
 
             const prod = productRes.rows[0];
+
+            // Insert product_prices
+            await client.query(`
+                INSERT INTO product_prices (product_id, setup_fee, price, service_charge, discount)
+                VALUES ($1, $2, $3, $4, $5)
+                ON CONFLICT (product_id) DO UPDATE SET
+                    setup_fee = EXCLUDED.setup_fee,
+                    price = EXCLUDED.price,
+                    service_charge = EXCLUDED.service_charge,
+                    discount = EXCLUDED.discount
+            `, [
+                prod.id,
+                Number(setup_fee) || 0,
+                Number(price) || 0,
+                Number(service_charge) || 0,
+                Number(discount) || 0
+            ]);
+
+            // Insert product_videos
+            if (videos && Array.isArray(videos) && videos.length > 0) {
+                for (const vid of videos) {
+                    const videoUrl = typeof vid === 'string' ? vid : vid.url;
+                    if (!videoUrl || !videoUrl.trim()) continue;
+                    await client.query(`
+                        INSERT INTO product_videos (product_id, url)
+                        VALUES ($1, $2)
+                    `, [prod.id, videoUrl.trim()]);
+                }
+            }
 
             // Insert product images
             if (images && Array.isArray(images) && images.length > 0) {
@@ -168,7 +223,7 @@ export async function POST(req) {
                 }
             }
 
-            // Log action if activity_logs table exists
+            // Log action
             try {
                 await client.query(`
                     INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
