@@ -10,7 +10,6 @@ import ProductForm from '@/component/forms/ProductForm';
 const ProductEditPage = ({ params }) => {
   const { slug } = use(params);
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProduct();
@@ -26,70 +25,55 @@ const ProductEditPage = ({ params }) => {
       }
     } catch (error) {
       toast.error('Failed to fetch product');
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 w-full space-y-6">
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6">
       <Toaster position="top-center" />
 
-      <div className="flex items-center justify-between">
-        <Link
-          href="/team/products"
-          className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-semibold text-sm"
-        >
-          <FiArrowLeft size={16} /> Back to Products
-        </Link>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-white flex items-center justify-center shadow-md shadow-primary-light/20 shrink-0">
-              <FiPackage size={20} />
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/team/products"
+            className="p-2.5 bg-white border border-slate-200 text-slate-600 hover:text-primary hover:bg-slate-50 rounded-xl transition-colors shrink-0 shadow-2xs"
+            title="Back to Products"
+          >
+            <FiArrowLeft size={16} />
+          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-extrabold text-slate-900">
+                {product?.name === 'enter title' ? 'New Product' : product?.name || 'Edit Product'}
+              </h1>
+              {product && (
+                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                  product.is_published ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500'
+                }`}>
+                  {product.is_published ? 'Published' : 'Draft'}
+                </span>
+              )}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Edit Product</h1>
-                {product && (
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                    product.is_published ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'
-                  }`}>
-                    {product.is_published ? 'Published' : 'Draft'}
-                  </span>
-                )}
-              </div>
-              <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
-                {loading ? 'Loading product details...' : product?.name === 'enter title' ? 'Editing new demo product details' : product?.name || slug}
-              </p>
-            </div>
+            <p className="text-slate-500 text-xs mt-0.5 font-mono">{slug}</p>
           </div>
         </div>
-
-        <div className="p-6 sm:p-8">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 space-y-3">
-              <div className="w-10 h-10 border-4 border-primary-light/20 border-t-primary-light rounded-full animate-spin"></div>
-              <p className="text-slate-400 text-sm font-semibold animate-pulse">Fetching product details...</p>
-            </div>
-          ) : product ? (
-            <ProductForm
-              initialData={product}
-              onCancel={() => window.history.back()}
-            />
-          ) : (
-            <div className="text-center py-16 text-slate-400">
-              <FiPackage size={40} className="mx-auto mb-3 opacity-40" />
-              <p className="text-base font-bold text-slate-700">Product not found</p>
-              <Link href="/team/products" className="text-primary hover:underline text-xs font-semibold mt-2 inline-block">
-                Return to Products List
-              </Link>
-            </div>
-          )}
-        </div>
       </div>
+
+      {product ? (
+        <ProductForm
+          initialData={product}
+          onCancel={() => window.history.back()}
+        />
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-400">
+          <FiPackage size={36} className="mx-auto mb-2 opacity-40" />
+          <p className="text-sm font-bold text-slate-700">Product details loading or not found...</p>
+          <Link href="/team/products" className="text-primary hover:underline text-xs font-semibold mt-2 inline-block">
+            Return to Products List
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import {
@@ -11,7 +10,6 @@ import {
 
 export default function PublicCareerPage() {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [expandedJobId, setExpandedJobId] = useState(null);
 
   // Apply Modal State
@@ -29,7 +27,6 @@ export default function PublicCareerPage() {
   }, []);
 
   const fetchJobs = async () => {
-    setLoading(true);
     try {
       const res = await axios.get('/api/public/career');
       if (res.data.success) {
@@ -37,8 +34,6 @@ export default function PublicCareerPage() {
       }
     } catch {
       toast.error('Failed to load career openings');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -119,11 +114,7 @@ export default function PublicCareerPage() {
       <section className="space-y-6">
         <h2 className="text-2xl font-extrabold text-slate-900">Open Positions</h2>
 
-        {loading ? (
-          <div className="py-16">
-            <Loading fullScreen={false} size="md" />
-          </div>
-        ) : jobs.length === 0 ? (
+        {jobs.length === 0 ? (
           <div className=" p-12 rounded-3xl text-center text-slate-500 space-y-2">
             <FiBriefcase size={36} className="mx-auto text-slate-300" />
             <h3 className="text-lg font-bold text-slate-800">No Open Positions Currently</h3>

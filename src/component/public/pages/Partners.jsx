@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 
 export default function Partners() {
   const [partners, setPartners] = useState([]);
-  const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -25,8 +24,6 @@ export default function Partners() {
       }
     } catch {
       console.error("Failed to load partners");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -52,7 +49,7 @@ export default function Partners() {
     });
   };
 
-  if (loading || partners.length === 0) return null;
+  if (partners.length === 0) return null;
 
   return (
     <motion.section

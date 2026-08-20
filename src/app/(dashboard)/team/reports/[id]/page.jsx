@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Loading from '@/app/loading';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -22,12 +21,10 @@ export default function ReportDetailPage() {
   const router = useRouter();
 
   const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState('');
   const [sending, setSending] = useState(false);
 
   const fetchReport = async () => {
-    setLoading(true);
     try {
       const res = await axios.get('/api/team/reports');
       if (res.data.success) {
@@ -42,8 +39,6 @@ export default function ReportDetailPage() {
       }
     } catch {
       toast.error('Failed to load report detail');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -86,10 +81,6 @@ export default function ReportDetailPage() {
       toast.error('Failed to delete report');
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!report) return null;
 

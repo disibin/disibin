@@ -12,7 +12,7 @@ const highlights = [
 
 const About = () => {
   return (
-    <section className="w-full py-20 my-4 overflow-hidden relative p-4 md:p-8 bg-primary text-tertiary-light">
+    <section className="w-full py-28 my-4 overflow-hidden relative px-4 md:px-8 bg-primary text-tertiary-light">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.03]"

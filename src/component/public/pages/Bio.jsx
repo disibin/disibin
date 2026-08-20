@@ -51,7 +51,7 @@ const Bio = () => {
   }, [])
 
   return (
-    <section className='w-full flex flex-col items-center justify-center gap-12 p-4 md:p-8 py-20 '>
+    <section className='w-full flex flex-col items-center justify-center gap-12 px-4 md:px-8 py-28 '>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -106,4 +106,4 @@ const Bio = () => {
   )
 }
 
-export default Bio
+export default Bio

@@ -265,7 +265,7 @@ export default function TeamBoardPage() {
                   ref={fileInputRef}
                   onChange={handleImageChange}
                   accept="image/*"
-                  className="input-style"
+                  className="hidden"
                 />
                 <div className="flex items-center gap-3">
                   <button

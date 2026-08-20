@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -17,7 +16,6 @@ export default function UserProjectDetailPage() {
   const projectId = params?.id;
 
   const [projectData, setProjectData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [sending, setSending] = useState(false);
@@ -50,7 +48,6 @@ export default function UserProjectDetailPage() {
   }, [projectData?.messages]);
 
   const fetchProjectWorkspace = async (isSilent = false) => {
-    if (!isSilent) setLoading(true);
     try {
       const res = await axios.get(`/api/user/project/${projectId}`);
       if (res.data.success) {
@@ -60,8 +57,6 @@ export default function UserProjectDetailPage() {
       }
     } catch {
       if (!isSilent) toast.error('Failed to load project');
-    } finally {
-      if (!isSilent) setLoading(false);
     }
   };
 
@@ -112,10 +107,6 @@ export default function UserProjectDetailPage() {
       setUpdatingAgreementId(null);
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!projectData || !projectData.project) {
     return (

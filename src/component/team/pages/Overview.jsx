@@ -44,14 +44,11 @@ const Overview = ({ teamData }) => {
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto w-full space-y-8">
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+      
+      <div className="bg-secondary  rounded-xl p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-light text-xs font-bold uppercase tracking-wider">
-            <FiShield size={12} />
-            <span>Role: {role}</span>
-          </div>
+          
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
             Welcome back, {teamData?.name || 'Staff Member'}
           </h1>
@@ -61,7 +58,6 @@ const Overview = ({ teamData }) => {
         </div>
       </div>
 
-      {/* Quick Access Section Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900">Operational Tools & Workspaces</h2>

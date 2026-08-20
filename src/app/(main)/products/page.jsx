@@ -2,11 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from '@/component/public/card/ProductCard';
-import Loading from '@/app/loading';
-
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,22 +14,16 @@ const ProductsPage = () => {
         }
       } catch (error) {
         console.error('Failed to fetch products', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchProducts();
   }, []);
 
-  if (loading) {
-    return <Loading size="md" />;
-  }
-
   return (
     <div className="min-h-screen w-full px-4 sm:px-6 lg:px-8 pb-16">
       <div className="w-full flex flex-col gap-10 ">
         <div className="text-center">
-          <h1 className="text-4xl sm:text-6xl text-slate-900 font-bold font-poppins">
+          <h1 className="text-3xl sm:text-5xl text-slate-900 font-semibold font-poppins">
             Our Premium Products
           </h1>
           <p className="mt-3 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto font-poppins">

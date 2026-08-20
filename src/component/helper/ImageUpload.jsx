@@ -59,7 +59,7 @@ const ImageUpload = ({ onUpload, label = "Upload Image" }) => {
           <input
             type="file"
             accept="image/*"
-            className="input-style cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
             onChange={handleFileChange}
             disabled={uploading}
           />

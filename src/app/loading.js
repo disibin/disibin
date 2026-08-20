@@ -34,7 +34,6 @@ export default function Loading({
   const content = (
     <div className={`flex flex-col items-center justify-center ${className}`}>
       <div className="relative flex items-center justify-center">
-        {/* Spinning gradient ring */}
         <motion.div
           className={`absolute rounded-full border-2 border-transparent border-t-teal-600 border-r-teal-400 ${selectedSize.ring}`}
           animate={{ rotate: 360 }}
@@ -45,12 +44,10 @@ export default function Loading({
           }}
         />
 
-        {/* Subtle background static ring */}
         <div
           className={`absolute rounded-full border border-teal-600/20 ${selectedSize.ring}`}
         />
 
-        {/* Logo Container with Soft Breathing Scale */}
         <motion.div
           className={`relative z-10 flex items-center justify-center p-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 ${selectedSize.container}`}
           animate={{

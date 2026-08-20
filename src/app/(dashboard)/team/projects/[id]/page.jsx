@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -18,7 +17,6 @@ export default function TeamProjectDetailPage() {
 
   const [projectData, setProjectData] = useState(null);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Chat & file state
   const [message, setMessage] = useState('');
@@ -73,7 +71,6 @@ export default function TeamProjectDetailPage() {
   }, [projectData?.messages]);
 
   const fetchWorkspace = async (isSilent = false) => {
-    if (!isSilent) setLoading(true);
     try {
       const res = await axios.get(`/api/team/projects/${projectId}`);
       if (res.data.success) {
@@ -83,8 +80,6 @@ export default function TeamProjectDetailPage() {
       }
     } catch {
       if (!isSilent) toast.error('Failed to load project workspace');
-    } finally {
-      if (!isSilent) setLoading(false);
     }
   };
 
@@ -225,10 +220,6 @@ export default function TeamProjectDetailPage() {
       setCreatingAgreement(false);
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!projectData || !projectData.project) {
     return (

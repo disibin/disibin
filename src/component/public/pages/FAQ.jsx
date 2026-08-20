@@ -4,11 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiChevronDown, FiArrowRight } from 'react-icons/fi'
 import Link from 'next/link'
 import axios from 'axios'
-import Loading from '@/app/loading'
 
 export default function FAQ() {
   const [faqs, setFaqs] = useState([])
-  const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState(null)
 
   useEffect(() => {
@@ -16,7 +14,6 @@ export default function FAQ() {
   }, [])
 
   const fetchFaqs = async () => {
-    setLoading(true)
     try {
       const res = await axios.get('/api/public/faq')
       if (res.data.success) {
@@ -24,8 +21,6 @@ export default function FAQ() {
       }
     } catch (error) {
       console.error('Failed to load FAQs:', error)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -51,11 +46,7 @@ export default function FAQ() {
           </p>
         </motion.div>
 
-        {loading ? (
-          <div className="py-16">
-            <Loading fullScreen={false} size="md" />
-          </div>
-        ) : faqs.length === 0 ? (
+        {faqs.length === 0 ? (
           <div className="text-center py-16 px-4 bg-slate-50 rounded-3xl border border-slate-100 mb-10">
             <p className="text-slate-500 font-poppins text-sm">No FAQs available at the moment.</p>
           </div>

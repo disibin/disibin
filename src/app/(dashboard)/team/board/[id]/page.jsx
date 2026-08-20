@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -17,7 +16,6 @@ export default function BoardMemberDetailPage() {
   const memberId = params?.id;
 
   const [member, setMember] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: '', post: '', email: '', bio: '' });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
@@ -31,7 +29,6 @@ export default function BoardMemberDetailPage() {
   }, [memberId]);
 
   const fetchMemberDetails = async () => {
-    setLoading(true);
     try {
       const res = await axios.get(`/api/team/board/${memberId}`);
       if (res.data.success) {
@@ -49,8 +46,6 @@ export default function BoardMemberDetailPage() {
       }
     } catch {
       toast.error('Failed to load board member details');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -115,10 +110,6 @@ export default function BoardMemberDetailPage() {
     }
   };
 
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
-
   if (!member) {
     return (
       <div className="p-6 max-w-3xl mx-auto space-y-4 text-center">
@@ -129,7 +120,7 @@ export default function BoardMemberDetailPage() {
           <p className="text-xs text-slate-500">The requested board member record does not exist.</p>
           <Link
             href="/team/board"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-violet-600 transition-all shadow-md"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-primary transition-all shadow-md"
           >
             <FiArrowLeft size={14} /> Back to Board Members
           </Link>
@@ -170,7 +161,7 @@ export default function BoardMemberDetailPage() {
               className="w-24 h-24 rounded-full object-cover border-2 border-primary/20 shadow-md shrink-0"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-extrabold text-3xl flex items-center justify-center shrink-0 border-2 border-violet-100 shadow-md">
+            <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-extrabold text-3xl flex items-center justify-center shrink-0 border-2 border-primary/20 shadow-md">
               {form.name?.charAt(0) || 'B'}
             </div>
           )}
@@ -186,7 +177,7 @@ export default function BoardMemberDetailPage() {
                 ref={fileInputRef}
                 onChange={handleImageChange}
                 accept="image/*"
-                className="input-style"
+                className="hidden"
               />
               <button
                 type="button"
@@ -256,7 +247,7 @@ export default function BoardMemberDetailPage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 shadow-md flex items-center gap-2"
+              className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 shadow-md flex items-center gap-2"
             >
               {saving ? <FiLoader className="animate-spin" size={14} /> : <FiSave size={14} />}
               {saving ? 'Saving Changes...' : 'Save Profile Changes'}

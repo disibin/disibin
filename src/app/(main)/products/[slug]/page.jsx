@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useContext } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -35,7 +34,6 @@ export default function ProductDetailPage() {
   const { userData, isLoggedIn } = useContext(Context);
 
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview'); // overview, features, support
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -54,16 +52,10 @@ export default function ProductDetailPage() {
       } catch (error) {
         console.error('Failed to fetch product', error);
         router.push('/products');
-      } finally {
-        setLoading(false);
       }
     };
     fetchProduct();
   }, [slug, router]);
-
-  if (loading) {
-    return <Loading size="md" />;
-  }
 
   if (!product) return null;
 

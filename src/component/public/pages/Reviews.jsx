@@ -22,7 +22,6 @@ const cardVariants = {
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -36,18 +35,15 @@ const Reviews = () => {
       } catch (error) {
         console.error('Failed to fetch reviews', error);
         setReviews([]);
-      } finally {
-        setLoading(false);
       }
     };
     fetchReviews();
   }, []);
 
-  if (loading) return null;
   if (!reviews || !Array.isArray(reviews) || reviews.length === 0) return null;
 
   return (
-    <section className="w-full bg-secondary p-4 md:p-8 flex flex-col items-center justify-center gap-8">
+    <section className="w-full bg-secondary px-4 md:px-8 py-28 flex flex-col items-center justify-center gap-8">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

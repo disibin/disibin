@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -16,7 +15,6 @@ export default function TeamTicketDetailPage() {
   const ticketId = params?.slug;
 
   const [thread, setThread] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [messageText, setMessageText] = useState('');
   const [attachedImages, setAttachedImages] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -49,7 +47,6 @@ export default function TeamTicketDetailPage() {
   }, [thread?.messages]);
 
   const fetchThread = async (isSilent = false) => {
-    if (!isSilent) setLoading(true);
     try {
       const res = await axios.get(`/api/team/ticket/${ticketId}`);
       if (res.data.success) {
@@ -59,8 +56,6 @@ export default function TeamTicketDetailPage() {
       }
     } catch {
       if (!isSilent) toast.error('Failed to load conversation thread');
-    } finally {
-      if (!isSilent) setLoading(false);
     }
   };
 
@@ -125,10 +120,6 @@ export default function TeamTicketDetailPage() {
       setSendingMsg(false);
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!thread || !thread.ticket) {
     return (

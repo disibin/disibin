@@ -29,7 +29,7 @@ const Intro = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: false, amount: 0.2 }}
-      className='w-full relative flex flex-col gap-12 items-start bg-primary text-tertiary-light justify-center p-4 md:p-8 py-40 overflow-hidden'
+      className='w-full relative flex flex-col gap-12 items-start bg-primary text-tertiary-light justify-center px-4 md:px-8 py-28 overflow-hidden'
     >
       <div className="relative z-10 w-full flex flex-col gap-12">
         <motion.div variants={itemVariants} className='w-full flex flex-col gap-4'>

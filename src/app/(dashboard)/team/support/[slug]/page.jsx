@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -18,7 +17,6 @@ export default function SupportDetailPage() {
   const requestId = params?.slug;
 
   const [support, setSupport] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState('');
   const [replyLoading, setReplyLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -28,7 +26,6 @@ export default function SupportDetailPage() {
   }, [requestId]);
 
   const fetchSupportDetail = async () => {
-    setLoading(true);
     try {
       const res = await axios.get('/api/team/support');
       if (res.data.success) {
@@ -42,8 +39,6 @@ export default function SupportDetailPage() {
       }
     } catch {
       toast.error('Failed to load support request details');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -89,10 +84,6 @@ export default function SupportDetailPage() {
       setDeleting(false);
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!support) {
     return (

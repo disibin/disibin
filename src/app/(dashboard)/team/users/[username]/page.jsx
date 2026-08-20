@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Loading from '@/app/loading';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { useRouter, useParams } from 'next/navigation';
@@ -18,14 +17,12 @@ export default function TeamUserProfilePage() {
   const rawParam = params?.username;
 
   const [profileData, setProfileData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (rawParam) fetchUserProfile();
   }, [rawParam]);
 
   const fetchUserProfile = async () => {
-    setLoading(true);
     try {
       let cleanParam = rawParam;
       try {
@@ -43,14 +40,8 @@ export default function TeamUserProfilePage() {
       }
     } catch {
       toast.error('Failed to load user profile');
-    } finally {
-      setLoading(false);
     }
   };
-
-  if (loading) {
-    return <Loading fullScreen={false} size="md" />;
-  }
 
   if (!profileData || !profileData.user) {
     return (
