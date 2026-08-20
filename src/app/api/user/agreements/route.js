@@ -13,8 +13,9 @@ async function ensureAgreementsTable() {
                 title VARCHAR(255) NOT NULL,
                 project_id INT,
                 user_id INT,
-                file_url TEXT NOT NULL,
-                file_id TEXT,
+                description TEXT,
+                start_date TIMESTAMP DEFAULT NOW(),
+                expire_date TIMESTAMP,
                 status VARCHAR(50) DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT NOW(),
                 updated_at TIMESTAMP DEFAULT NOW()
@@ -37,7 +38,7 @@ export async function GET() {
         const userId = auth.data.id;
 
         const res = await dbQuery(`
-            SELECT a.id, a.title, a.project_id, a.file_url, a.status, a.created_at, a.updated_at,
+            SELECT a.id, a.title, a.project_id, a.description, a.start_date, a.expire_date, a.status, a.created_at, a.updated_at,
                    p.title as project_title
             FROM agreements a
             LEFT JOIN projects p ON a.project_id = p.id
@@ -67,9 +68,9 @@ export async function PATCH(req) {
             return NextResponse.json({ success: false, message: "Agreement ID and Status are required" }, { status: 400 });
         }
 
-        const validStatuses = ['signed', 'rejected'];
+        const validStatuses = ['signed', 'rejected', 'completed', 'active'];
         if (!validStatuses.includes(status)) {
-            return NextResponse.json({ success: false, message: "Status must be signed or rejected" }, { status: 400 });
+            return NextResponse.json({ success: false, message: "Invalid agreement status" }, { status: 400 });
         }
 
         const res = await dbQuery(`

@@ -7,8 +7,11 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   FiArrowLeft, FiSend, FiPaperclip,
-  FiCreditCard, FiFileText, FiLoader, FiExternalLink, FiPlus, FiAlertCircle
+  FiCreditCard, FiFileText, FiLoader, FiExternalLink, FiPlus, FiAlertCircle,
+  FiPrinter, FiEdit3, FiCheckCircle
 } from 'react-icons/fi';
+import TiptapEditor from '@/component/helper/TiptapEditor';
+import PrintableAgreement from '@/component/projects/PrintableAgreement';
 
 export default function TeamProjectDetailPage() {
   const router = useRouter();
@@ -24,27 +27,33 @@ export default function TeamProjectDetailPage() {
   const [sending, setSending] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
-  // Purchase Form
+  // Purchase / Payment Form
   const [showPurchaseForm, setShowPurchaseForm] = useState(false);
   const [purProductId, setPurProductId] = useState('');
   const [purPrice, setPurPrice] = useState('');
   const [purDiscount, setPurDiscount] = useState('0');
   const [creatingPurchase, setCreatingPurchase] = useState(false);
 
-  // Preview
+  // Preview Image
   const [previewImage, setPreviewImage] = useState(null);
 
   // Payment Status
   const [updatingPaymentId, setUpdatingPaymentId] = useState(null);
 
-  // Agreement Form
+  // Agreement Form with Tiptap
   const [showAgreementForm, setShowAgreementForm] = useState(false);
+  const [editingAgreementId, setEditingAgreementId] = useState(null);
   const [agrTitle, setAgrTitle] = useState('');
-  const [agrFile, setAgrFile] = useState(null);
+  const [agrStartDate, setAgrStartDate] = useState('');
+  const [agrExpireDate, setAgrExpireDate] = useState('');
+  const [agrStatus, setAgrStatus] = useState('pending');
+  const [agrDescription, setAgrDescription] = useState('');
   const [creatingAgreement, setCreatingAgreement] = useState(false);
 
+  // Printable Agreement Modal
+  const [printableAgreement, setPrintableAgreement] = useState(null);
+
   const fileInputRef = useRef(null);
-  const agrFileInputRef = useRef(null);
   const prevMsgCountRef = useRef(0);
   const messagesEndRef = useRef(null);
 
@@ -88,6 +97,16 @@ export default function TeamProjectDetailPage() {
       const res = await axios.get('/api/public/product');
       if (res.data.success) setProducts(res.data.data);
     } catch {}
+  };
+
+  const handleProductSelect = (selectedId) => {
+    setPurProductId(selectedId);
+    if (!selectedId) return;
+    const prod = products.find(p => String(p.id) === String(selectedId));
+    if (prod) {
+      const priceVal = prod.price || prod.product_price || (prod.prices && prod.prices[0]?.price) || '';
+      if (priceVal) setPurPrice(String(priceVal));
+    }
   };
 
   const handleStatusChange = async (newStatus) => {
@@ -152,7 +171,7 @@ export default function TeamProjectDetailPage() {
       });
 
       if (res.data.success) {
-        toast.success('Purchase created!');
+        toast.success('Payment proposal created!');
         setShowPurchaseForm(false);
         setPurPrice('');
         fetchWorkspace(true);
@@ -176,7 +195,7 @@ export default function TeamProjectDetailPage() {
       });
 
       if (res.data.success) {
-        toast.success(res.data.message);
+        toast.success(res.data.message || 'Payment marked as completed');
         fetchWorkspace(true);
       } else {
         toast.error(res.data.message || 'Failed to update payment');
@@ -188,34 +207,68 @@ export default function TeamProjectDetailPage() {
     }
   };
 
-  const handleCreateAgreement = async (e) => {
+  const startEditAgreement = (agr) => {
+    setEditingAgreementId(agr.id);
+    setAgrTitle(agr.title || '');
+    setAgrStartDate(agr.start_date ? new Date(agr.start_date).toISOString().split('T')[0] : '');
+    setAgrExpireDate(agr.expire_date ? new Date(agr.expire_date).toISOString().split('T')[0] : '');
+    setAgrStatus(agr.status || 'pending');
+    setAgrDescription(agr.description || '');
+    setShowAgreementForm(true);
+  };
+
+  const resetAgreementForm = () => {
+    setEditingAgreementId(null);
+    setAgrTitle('');
+    setAgrStartDate('');
+    setAgrExpireDate('');
+    setAgrStatus('pending');
+    setAgrDescription('');
+    setShowAgreementForm(false);
+  };
+
+  const handleCreateOrUpdateAgreement = async (e) => {
     e.preventDefault();
-    if (!agrTitle.trim()) return toast.error('Title is required');
-    if (!agrFile) return toast.error('Please select document PDF');
+    if (!agrTitle.trim()) return toast.error('Agreement title is required');
 
     setCreatingAgreement(true);
-    const formData = new FormData();
-    formData.append('title', agrTitle.trim());
-    formData.append('project_id', projectId);
-    formData.append('user_id', projectData?.project?.user_id || '');
-    formData.append('file', agrFile);
-
     try {
-      const res = await axios.post('/api/team/agreements', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      if (res.data.success) {
-        toast.success('Agreement document created!');
-        setShowAgreementForm(false);
-        setAgrTitle('');
-        setAgrFile(null);
-        fetchWorkspace(true);
+      if (editingAgreementId) {
+        const res = await axios.patch('/api/team/agreements', {
+          id: editingAgreementId,
+          title: agrTitle.trim(),
+          description: agrDescription,
+          start_date: agrStartDate || new Date(),
+          expire_date: agrExpireDate || null,
+          status: agrStatus
+        });
+        if (res.data.success) {
+          toast.success('Agreement updated!');
+          resetAgreementForm();
+          fetchWorkspace(true);
+        } else {
+          toast.error(res.data.message || 'Failed to update agreement');
+        }
       } else {
-        toast.error(res.data.message || 'Failed to create agreement');
+        const res = await axios.post('/api/team/agreements', {
+          title: agrTitle.trim(),
+          project_id: projectId,
+          user_id: projectData?.project?.user_id || null,
+          description: agrDescription,
+          start_date: agrStartDate || new Date(),
+          expire_date: agrExpireDate || null,
+          status: agrStatus
+        });
+        if (res.data.success) {
+          toast.success('Agreement created successfully!');
+          resetAgreementForm();
+          fetchWorkspace(true);
+        } else {
+          toast.error(res.data.message || 'Failed to create agreement');
+        }
       }
     } catch {
-      toast.error('Error creating agreement');
+      toast.error('Error saving agreement');
     } finally {
       setCreatingAgreement(false);
     }
@@ -242,6 +295,15 @@ export default function TeamProjectDetailPage() {
   return (
     <div className="p-4 max-w-6xl mx-auto space-y-4">
       <Toaster position="top-center" />
+
+      {/* Printable Agreement Modal */}
+      {printableAgreement && (
+        <PrintableAgreement
+          agreement={printableAgreement}
+          project={project}
+          onClose={() => setPrintableAgreement(null)}
+        />
+      )}
 
       {/* Clean Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
@@ -280,12 +342,14 @@ export default function TeamProjectDetailPage() {
         </div>
       </div>
 
+      {/* Main Grid: Discussion Thread (7 cols) & Sidebar Controls (5 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Messages */}
+        {/* Discussion Workspace (7 cols) */}
         <div className="lg:col-span-7 space-y-3">
           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col h-[480px]">
-            <div className="p-3 border-b border-slate-100 bg-slate-50 font-bold text-xs text-slate-700">
-              Live Discussion Workspace
+            <div className="p-3 border-b border-slate-100 bg-slate-50 font-bold text-xs text-slate-700 flex items-center justify-between">
+              <span>Live Discussion Workspace</span>
+              <span className="text-[10px] text-slate-400 font-normal">Realtime Staff Chat</span>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -373,7 +437,7 @@ export default function TeamProjectDetailPage() {
 
         {/* Sidebar Controls (5 cols) */}
         <div className="lg:col-span-5 space-y-3 text-xs">
-          {/* Billing & Purchase */}
+          {/* Billing & Purchases */}
           <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <h3 className="font-bold text-slate-800 flex items-center gap-1.5">
@@ -390,16 +454,19 @@ export default function TeamProjectDetailPage() {
             {showPurchaseForm && (
               <form onSubmit={handleCreatePurchase} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Product</label>
+                  <label className="block font-semibold text-slate-700 mb-1">Product Base</label>
                   <select
                     value={purProductId}
-                    onChange={e => setPurProductId(e.target.value)}
+                    onChange={e => handleProductSelect(e.target.value)}
                     className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs"
                   >
                     <option value="">Custom Service Proposal</option>
-                    {products.map(p => (
-                      <option key={p.id} value={p.id}>{p.name} (${p.price})</option>
-                    ))}
+                    {products.map(p => {
+                      const priceVal = p.price || p.product_price || (p.prices && p.prices[0]?.price) || '';
+                      return (
+                        <option key={p.id} value={p.id}>{p.name} {priceVal ? `($${priceVal})` : ''}</option>
+                      );
+                    })}
                   </select>
                 </div>
 
@@ -438,7 +505,7 @@ export default function TeamProjectDetailPage() {
                   <button
                     type="submit"
                     disabled={creatingPurchase}
-                    className="px-3 py-1 bg-emerald-600 text-white font-semibold rounded"
+                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded"
                   >
                     {creatingPurchase ? 'Saving...' : 'Create Invoice'}
                   </button>
@@ -451,22 +518,28 @@ export default function TeamProjectDetailPage() {
             ) : (
               purchases.map(pur => (
                 <div key={pur.purchase_id} className="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-1.5">
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-slate-700">Proposal</span>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-slate-700">Proposal #{pur.purchase_id}</span>
                     <span className="font-bold text-slate-900">${pur.price}</span>
                   </div>
-                  <div className="flex justify-between text-slate-500">
+                  <div className="flex justify-between items-center text-slate-500">
                     <span>Payment Status</span>
-                    <span className="font-semibold uppercase">{pur.payment_status || 'unpaid'}</span>
+                    <span className={`font-semibold uppercase px-2 py-0.5 rounded text-[10px] ${
+                      pur.payment_status === 'paid'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      {pur.payment_status || 'unpaid'}
+                    </span>
                   </div>
                   {pur.payment_status !== 'paid' && (
                     <div className="pt-1 text-right">
                       <button
                         onClick={() => handleUpdatePaymentStatus(pur.payment_id, 'paid', pur.payment_price || pur.price)}
                         disabled={updatingPaymentId === pur.payment_id}
-                        className="px-2.5 py-1 bg-emerald-600 text-white rounded font-semibold text-[11px]"
+                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-semibold text-[11px] flex items-center gap-1 inline-flex"
                       >
-                        Mark Paid
+                        <FiCheckCircle size={11} /> Mark Paid
                       </button>
                     </div>
                   )}
@@ -475,49 +548,101 @@ export default function TeamProjectDetailPage() {
             )}
           </div>
 
-          {/* Agreements */}
+          {/* Agreements Section in Sidebar (Original Layout Location) */}
           <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <h3 className="font-bold text-slate-800 flex items-center gap-1.5">
                 <FiFileText size={14} className="text-slate-500" /> Agreements
               </h3>
               <button
-                onClick={() => setShowAgreementForm(!showAgreementForm)}
+                onClick={() => {
+                  if (showAgreementForm && !editingAgreementId) {
+                    setShowAgreementForm(false);
+                  } else {
+                    resetAgreementForm();
+                    setShowAgreementForm(true);
+                  }
+                }}
                 className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
               >
                 <FiPlus size={13} /> Add Document
               </button>
             </div>
 
+            {/* Agreement Create / Edit Form with Tiptap Editor */}
             {showAgreementForm && (
-              <form onSubmit={handleCreateAgreement} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+              <form onSubmit={handleCreateOrUpdateAgreement} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-800 text-xs">
+                    {editingAgreementId ? 'Edit Agreement' : 'New Agreement'}
+                  </span>
+                  <button type="button" onClick={resetAgreementForm} className="text-[11px] text-slate-400 hover:text-slate-700">
+                    Cancel
+                  </button>
+                </div>
+
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Title *</label>
+                  <label className="block font-semibold text-slate-700 mb-0.5 text-[11px]">Title *</label>
                   <input
                     type="text"
                     required
                     value={agrTitle}
                     onChange={e => setAgrTitle(e.target.value)}
-                    placeholder="E.g. Scope of Work"
+                    placeholder="E.g. Scope of Work & Terms"
                     className="w-full px-2.5 py-1 bg-white border border-slate-200 rounded text-xs"
                   />
                 </div>
 
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block font-semibold text-slate-700 mb-0.5 text-[11px]">Start Date</label>
+                    <input
+                      type="date"
+                      value={agrStartDate}
+                      onChange={e => setAgrStartDate(e.target.value)}
+                      className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-slate-700 mb-0.5 text-[11px]">Expire Date</label>
+                    <input
+                      type="date"
+                      value={agrExpireDate}
+                      onChange={e => setAgrExpireDate(e.target.value)}
+                      className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-xs"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">PDF File *</label>
-                  <input
-                    type="file"
-                    ref={agrFileInputRef}
-                    onChange={e => setAgrFile(e.target.files[0])}
-                    accept=".pdf,.doc,.docx"
-                    className="w-full text-xs"
+                  <label className="block font-semibold text-slate-700 mb-0.5 text-[11px]">Status</label>
+                  <select
+                    value={agrStatus}
+                    onChange={e => setAgrStatus(e.target.value)}
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-xs"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="signed">Signed</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-0.5 text-[11px]">Terms (Tiptap Editor)</label>
+                  <TiptapEditor
+                    value={agrDescription}
+                    onChange={setAgrDescription}
+                    placeholder="Write terms..."
+                    minHeight="140px"
                   />
                 </div>
 
                 <div className="flex justify-end gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={() => setShowAgreementForm(false)}
+                    onClick={resetAgreementForm}
                     className="px-2.5 py-1 text-slate-500 font-medium"
                   >
                     Cancel
@@ -525,9 +650,9 @@ export default function TeamProjectDetailPage() {
                   <button
                     type="submit"
                     disabled={creatingAgreement}
-                    className="px-3 py-1 bg-primary text-white font-semibold rounded"
+                    className="px-3 py-1 bg-primary text-white font-semibold rounded text-xs"
                   >
-                    {creatingAgreement ? 'Uploading...' : 'Send Document'}
+                    {creatingAgreement ? 'Saving...' : editingAgreementId ? 'Update' : 'Save Agreement'}
                   </button>
                 </div>
               </form>
@@ -537,21 +662,40 @@ export default function TeamProjectDetailPage() {
               <p className="text-slate-400">No agreement document added.</p>
             ) : (
               agreements.map(agr => (
-                <div key={agr.id} className="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-1">
+                <div key={agr.id} className="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-1.5">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold text-slate-800 truncate">{agr.title}</span>
-                    <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded border border-slate-200">
-                      {agr.status}
+                    <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded border ${
+                      agr.status === 'signed' || agr.status === 'completed'
+                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                        : agr.status === 'active'
+                        ? 'bg-blue-100 text-blue-800 border-blue-300'
+                        : 'bg-amber-100 text-amber-800 border-amber-300'
+                    }`}>
+                      {agr.status || 'pending'}
                     </span>
                   </div>
-                  <a
-                    href={agr.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary font-semibold hover:underline inline-flex items-center gap-1 text-[11px]"
-                  >
-                    <FiExternalLink size={11} /> View Document
-                  </a>
+
+                  <div className="text-[10px] text-slate-500 flex justify-between">
+                    <span>Start: {agr.start_date ? new Date(agr.start_date).toLocaleDateString() : 'N/A'}</span>
+                    <span>Expire: {agr.expire_date ? new Date(agr.expire_date).toLocaleDateString() : 'None'}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 text-[11px]">
+                    <button
+                      onClick={() => setPrintableAgreement(agr)}
+                      className="text-primary font-semibold hover:underline inline-flex items-center gap-1"
+                    >
+                      <FiExternalLink size={11} /> View Document
+                    </button>
+
+                    <button
+                      onClick={() => startEditAgreement(agr)}
+                      className="text-slate-500 hover:text-slate-900 font-semibold text-[11px] inline-flex items-center gap-0.5"
+                    >
+                      <FiEdit3 size={11} /> Edit
+                    </button>
+                  </div>
                 </div>
               ))
             )}

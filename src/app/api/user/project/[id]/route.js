@@ -65,7 +65,7 @@ export async function GET(req, { params }) {
 
         // Fetch agreements
         const agreementsRes = await dbQuery(`
-            SELECT id, title, file_url, status, created_at, updated_at
+            SELECT id, title, description, start_date, expire_date, status, created_at, updated_at
             FROM agreements
             WHERE project_id = $1
             ORDER BY created_at DESC

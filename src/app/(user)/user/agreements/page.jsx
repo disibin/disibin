@@ -2,16 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
 import {
-  FiBookOpen, FiExternalLink, FiCheckCircle, FiXCircle,
-  FiLoader, FiClock, FiRefreshCw
+  FiBookOpen, FiPrinter, FiCheckCircle, FiXCircle,
+  FiLoader, FiClock, FiRefreshCw, FiCalendar, FiArrowRight
 } from 'react-icons/fi';
+import PrintableAgreement from '@/component/projects/PrintableAgreement';
 
 export default function UserAgreementsPage() {
   const [agreements, setAgreements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [printableAgreement, setPrintableAgreement] = useState(null);
 
   useEffect(() => {
     fetchAgreements();
@@ -55,6 +58,17 @@ export default function UserAgreementsPage() {
     <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6">
       <Toaster position="top-center" />
 
+      {/* Printable Agreement Modal */}
+      {printableAgreement && (
+        <PrintableAgreement
+          agreement={printableAgreement}
+          project={{
+            title: printableAgreement.project_title || `Project #${printableAgreement.project_id}`
+          }}
+          onClose={() => setPrintableAgreement(null)}
+        />
+      )}
+
       {/* Header Banner */}
       <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -65,7 +79,7 @@ export default function UserAgreementsPage() {
             My Service & Project Agreements
           </h1>
           <p className="text-slate-500 text-sm pl-11">
-            Review and sign legal service contracts and project scope documents
+            Review, sign, and print legal service contracts and project scope documents
           </p>
         </div>
 
@@ -96,35 +110,34 @@ export default function UserAgreementsPage() {
           <div className="divide-y divide-slate-100">
             {agreements.map((a) => (
               <div key={a.id} className="p-6 space-y-3 hover:bg-slate-50/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-1 min-w-0">
+                <div className="space-y-1.5 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-extrabold text-slate-900 text-base">{a.title}</h3>
-                    <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase ${
-                      a.status === 'signed'
-                        ? 'bg-emerald-100 text-emerald-700'
+                    <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase border ${
+                      a.status === 'signed' || a.status === 'completed'
+                        ? 'bg-emerald-100 text-emerald-700 border-emerald-300'
                         : a.status === 'rejected'
-                        ? 'bg-rose-100 text-rose-700'
-                        : 'bg-amber-100 text-amber-700'
+                        ? 'bg-rose-100 text-rose-700 border-rose-300'
+                        : 'bg-amber-100 text-amber-700 border-amber-300'
                     }`}>
-                      {a.status}
+                      {a.status || 'pending'}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-500">
-                    Project: <span className="font-semibold text-slate-700">{a.project_title || `Project #${a.project_id}`}</span>
-                    <span> · Created {new Date(a.created_at).toLocaleDateString()}</span>
+                  <p className="text-xs text-slate-500 flex items-center gap-3 flex-wrap">
+                    <span>Project: <Link href={`/user/projects/${a.project_id}`} className="font-semibold text-slate-700 hover:underline">{a.project_title || `Project #${a.project_id}`}</Link></span>
+                    <span className="flex items-center gap-1"><FiCalendar size={12} /> Start: {a.start_date ? new Date(a.start_date).toLocaleDateString() : 'N/A'}</span>
+                    <span className="flex items-center gap-1"><FiClock size={12} /> Expire: {a.expire_date ? new Date(a.expire_date).toLocaleDateString() : 'No Expiry'}</span>
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <a
-                    href={a.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => setPrintableAgreement(a)}
                     className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-primary text-white rounded-xl text-xs font-bold transition-all shadow-sm"
                   >
-                    <FiExternalLink size={13} /> View PDF
-                  </a>
+                    <FiExternalLink size={13} /> View Document
+                  </button>
 
                   {a.status === 'pending' && (
                     <>

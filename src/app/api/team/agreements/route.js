@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { isTeamLogin } from "@/lib/auth/team";
 import { dbQuery } from "@/lib/database/pg";
-import cloudinary from "@/lib/database/cloudinary";
 
 let tableInitialized = false;
 
@@ -14,8 +13,9 @@ async function ensureAgreementsTable() {
                 title VARCHAR(255) NOT NULL,
                 project_id INT,
                 user_id INT,
-                file_url TEXT NOT NULL,
-                file_id TEXT,
+                description TEXT,
+                start_date TIMESTAMP DEFAULT NOW(),
+                expire_date TIMESTAMP,
                 status VARCHAR(50) DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT NOW(),
                 updated_at TIMESTAMP DEFAULT NOW()
@@ -36,7 +36,7 @@ export async function GET() {
         await ensureAgreementsTable();
 
         const res = await dbQuery(`
-            SELECT a.id, a.title, a.project_id, a.user_id, a.file_url, a.file_id, a.status, a.created_at, a.updated_at,
+            SELECT a.id, a.title, a.project_id, a.user_id, a.description, a.start_date, a.expire_date, a.status, a.created_at, a.updated_at,
                    p.title as project_title, u.name as user_name, u.email as user_email
             FROM agreements a
             LEFT JOIN projects p ON a.project_id = p.id
@@ -51,7 +51,7 @@ export async function GET() {
     }
 }
 
-// POST — Create agreement document linking to project and user
+// POST — Create agreement with description, start_date, expire_date
 export async function POST(req) {
     try {
         const auth = await isTeamLogin();
@@ -59,37 +59,28 @@ export async function POST(req) {
 
         await ensureAgreementsTable();
 
-        const formData = await req.formData();
-        const title = formData.get("title");
-        const project_id = formData.get("project_id");
-        const user_id = formData.get("user_id");
-        const file = formData.get("file");
+        const contentType = req.headers.get("content-type") || "";
+        let body = {};
+
+        if (contentType.includes("application/json")) {
+            body = await req.json();
+        } else {
+            const formData = await req.formData();
+            body = {
+                title: formData.get("title"),
+                project_id: formData.get("project_id"),
+                user_id: formData.get("user_id"),
+                description: formData.get("description"),
+                start_date: formData.get("start_date"),
+                expire_date: formData.get("expire_date"),
+                status: formData.get("status") || "pending"
+            };
+        }
+
+        const { title, project_id, user_id, description, start_date, expire_date, status = "pending" } = body;
 
         if (!title || !project_id) {
             return NextResponse.json({ success: false, message: "Title and Project ID are required" }, { status: 400 });
-        }
-
-        let file_url = "", file_id = "";
-
-        if (file && typeof file === "object" && file.arrayBuffer) {
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            const uploadResult = await new Promise((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream(
-                    { folder: "agreements", resource_type: "auto" },
-                    (error, result) => {
-                        if (error) reject(error);
-                        else resolve(result);
-                    }
-                );
-                uploadStream.end(buffer);
-            });
-            file_url = uploadResult.secure_url;
-            file_id = uploadResult.public_id;
-        } else if (typeof file === "string" && file.trim()) {
-            file_url = file.trim();
-        } else {
-            return NextResponse.json({ success: false, message: "Please attach an agreement document file" }, { status: 400 });
         }
 
         // Get user_id from project if not passed explicitly
@@ -100,16 +91,69 @@ export async function POST(req) {
         }
 
         const res = await dbQuery(`
-            INSERT INTO agreements (title, project_id, user_id, file_url, file_id, status)
-            VALUES ($1, $2, $3, $4, $5, 'pending')
+            INSERT INTO agreements (title, project_id, user_id, description, start_date, expire_date, status)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *
-        `, [title.trim(), project_id, targetUserId || null, file_url, file_id]);
+        `, [
+            title.trim(),
+            project_id,
+            targetUserId || null,
+            description || '',
+            start_date ? new Date(start_date) : new Date(),
+            expire_date ? new Date(expire_date) : null,
+            status || 'pending'
+        ]);
 
         return NextResponse.json({
             success: true,
             message: "Agreement created successfully!",
             data: res.rows[0]
         }, { status: 201 });
+
+    } catch (error) {
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    }
+}
+
+// PATCH — Staff updates agreement
+export async function PATCH(req) {
+    try {
+        const auth = await isTeamLogin();
+        if (!auth.success) return NextResponse.json(auth, { status: 401 });
+
+        await ensureAgreementsTable();
+
+        const { id, title, description, start_date, expire_date, status } = await req.json();
+        if (!id) return NextResponse.json({ success: false, message: "Agreement ID is required" }, { status: 400 });
+
+        const res = await dbQuery(`
+            UPDATE agreements
+            SET title = COALESCE($1, title),
+                description = COALESCE($2, description),
+                start_date = COALESCE($3, start_date),
+                expire_date = COALESCE($4, expire_date),
+                status = COALESCE($5, status),
+                updated_at = NOW()
+            WHERE id = $6
+            RETURNING *
+        `, [
+            title ? title.trim() : null,
+            description !== undefined ? description : null,
+            start_date ? new Date(start_date) : null,
+            expire_date ? new Date(expire_date) : null,
+            status || null,
+            id
+        ]);
+
+        if (res.rows.length === 0) {
+            return NextResponse.json({ success: false, message: "Agreement not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({
+            success: true,
+            message: "Agreement updated successfully",
+            data: res.rows[0]
+        });
 
     } catch (error) {
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });

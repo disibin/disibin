@@ -9,6 +9,7 @@ import {
   FiArrowLeft, FiSend, FiPaperclip,
   FiCreditCard, FiFileText, FiLoader, FiExternalLink, FiAlertCircle
 } from 'react-icons/fi';
+import PrintableAgreement from '@/component/projects/PrintableAgreement';
 
 export default function UserProjectDetailPage() {
   const router = useRouter();
@@ -21,6 +22,9 @@ export default function UserProjectDetailPage() {
   const [sending, setSending] = useState(false);
   const [updatingAgreementId, setUpdatingAgreementId] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // Printable Agreement Modal
+  const [printableAgreement, setPrintableAgreement] = useState(null);
 
   const fileInputRef = useRef(null);
   const prevMsgCountRef = useRef(0);
@@ -129,6 +133,15 @@ export default function UserProjectDetailPage() {
   return (
     <div className="p-4 max-w-5xl mx-auto space-y-4">
       <Toaster position="top-center" />
+
+      {/* Printable Agreement Modal */}
+      {printableAgreement && (
+        <PrintableAgreement
+          agreement={printableAgreement}
+          project={project}
+          onClose={() => setPrintableAgreement(null)}
+        />
+      )}
 
       {/* Clean Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-200">
@@ -290,14 +303,12 @@ export default function UserProjectDetailPage() {
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    <a
-                      href={agr.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary font-semibold hover:underline inline-flex items-center gap-1"
+                    <button
+                      onClick={() => setPrintableAgreement(agr)}
+                      className="text-primary font-semibold hover:underline inline-flex items-center gap-1 text-[11px]"
                     >
-                      <FiExternalLink size={11} /> Document
-                    </a>
+                      <FiExternalLink size={11} /> View Document
+                    </button>
 
                     {agr.status === 'pending' && (
                       <div className="flex items-center gap-1">

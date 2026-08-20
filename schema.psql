@@ -635,9 +635,10 @@ CREATE TABLE IF NOT EXISTS agreements (
   title TEXT NOT NULL,
   project_id INT REFERENCES projects(id) ON DELETE CASCADE,
   user_id INT REFERENCES users(id) ON DELETE CASCADE,
-  file_url TEXT NOT NULL,
-  file_id TEXT,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'signed', 'rejected')),
+  description TEXT,
+  start_date TIMESTAMP DEFAULT now(),
+  expire_date TIMESTAMP,
+  status TEXT DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()
 );
