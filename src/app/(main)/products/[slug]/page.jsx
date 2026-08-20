@@ -82,13 +82,13 @@ export default function ProductDetailPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 text-slate-500 hover:text-primary font-semibold text-sm transition-all group"
+            className="inline-flex items-center gap-2 text-slate-500 hover:text-primary font-semibold text-xs transition-all group"
           >
             <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" />
             Back to Products
           </Link>
           <span className="text-slate-300">/</span>
-          <span className="text-slate-400 text-sm font-medium truncate max-w-xs">{product.name}</span>
+          <span className="text-slate-400 text-xs font-medium truncate max-w-xs">{product.name}</span>
         </div>
 
         <div className="flex flex-col gap-8 w-full ">
@@ -162,7 +162,6 @@ export default function ProductDetailPage() {
             </Link>
           </div>
 
-          {/* 5. Other Prices */}
           {(setupFee > 0 || serviceCharge > 0) && (
             <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3">
               <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider font-poppins">Additional Fees &amp; Charges</h3>

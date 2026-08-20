@@ -29,7 +29,7 @@ const Footer = () => {
           <div className='space-y-6'>
             <h4 className='text-xs font-semibold uppercase tracking-widest text-slate-50'>Resources & Support</h4>
             <div className='flex flex-col gap-3 text-sm text-tertiary-light'>
-              <Link href='/faq' className='hover:text-secondary transition-colors'>FAQ</Link>
+              <Link href='/videos' className='hover:text-secondary transition-colors'>Videos</Link>
               <Link href='/contact' className='hover:text-secondary transition-colors'>Support Desk</Link>
               <Link href='/report' className='hover:text-secondary transition-colors'>Report Issue</Link>
               <Link href='/reviews' className='hover:text-secondary transition-colors'>Reviews</Link>
@@ -40,6 +40,7 @@ const Footer = () => {
           <div className='space-y-6'>
             <h4 className='text-xs font-semibold uppercase tracking-widest text-slate-50'>Legal Policies</h4>
             <div className='flex flex-col gap-3 text-sm text-tertiary-light'>
+              <Link href='/faq' className='hover:text-secondary transition-colors'>FAQ</Link>
               <Link href='/privacy-policy' className='hover:text-secondary transition-colors'>Privacy Policy</Link>
               <Link href='/terms-and-conditions' className='hover:text-secondary transition-colors'>Terms and Conditions</Link>
               <Link href='/refund-policy' className='hover:text-secondary transition-colors'>Refund Policy</Link>
