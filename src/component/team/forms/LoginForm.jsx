@@ -44,7 +44,7 @@ const LoginForm = () => {
   const labelCls = 'text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1';
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen p-4">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen p-4">
       <Toaster position="top-center" />
       <div className="w-full max-w-sm flex flex-col p-6 rounded-2xl items-center justify-center gap-3">
 
@@ -98,7 +98,7 @@ const LoginForm = () => {
           <button
             id="team-login-btn"
             disabled={loading}
-            className="w-full py-3 rounded-xl cursor-pointer bg-slate-900 text-white font-bold hover:bg-slate-700 transition-all duration-200 mt-2 shadow-lg shadow-slate-900/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-xl cursor-pointer bg-primary text-white font-bold hover:bg-primary-dark transition-all duration-200 mt-2 shadow-lg shadow-primary/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </button>

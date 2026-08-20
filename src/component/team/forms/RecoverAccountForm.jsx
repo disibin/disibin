@@ -107,7 +107,7 @@ const RecoverAccountForm = () => {
             <button
               id="team-reset-btn"
               disabled={loading}
-              className="w-full py-3 rounded-xl cursor-pointer bg-slate-900 text-white font-bold hover:bg-slate-700 transition-all duration-200 mt-2 shadow-lg shadow-slate-900/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl cursor-pointer bg-primary text-white font-bold hover:bg-primary-dark transition-all duration-200 mt-2 shadow-lg shadow-primary/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
             >
               {loading ? 'Updating Password...' : 'Reset Password'}
             </button>
@@ -152,7 +152,7 @@ const RecoverAccountForm = () => {
             <button
               id="team-send-reset-btn"
               disabled={loading}
-              className="w-full py-3 rounded-xl cursor-pointer bg-slate-900 text-white font-bold hover:bg-slate-700 transition-all duration-200 mt-2 shadow-lg shadow-slate-900/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl cursor-pointer bg-primary text-white font-bold hover:bg-primary-dark transition-all duration-200 mt-2 shadow-lg shadow-primary/20 disabled:bg-slate-300 disabled:cursor-not-allowed"
             >
               {loading ? 'Sending Link...' : 'Send Reset Link'}
             </button>

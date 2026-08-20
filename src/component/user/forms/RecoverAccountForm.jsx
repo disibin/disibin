@@ -95,7 +95,7 @@ const RecoverAccountForm = () => {
             </div>
             <button
               disabled={loading}
-              className="w-full py-2 rounded-lg cursor-pointer bg-slate-900 text-white font-bold hover:bg-primary transition-all duration-300 mt-4 shadow-xl shadow-slate-900/10 disabled:bg-slate-400"
+              className="w-full py-3 rounded-xl cursor-pointer bg-primary text-white font-bold hover:bg-primary-dark transition-all duration-200 mt-4 shadow-lg shadow-primary/20 disabled:bg-slate-300"
             >
               {loading ? 'Updating Password...' : 'Reset Password'}
             </button>
@@ -135,7 +135,7 @@ const RecoverAccountForm = () => {
             </div>
             <button
               disabled={loading}
-              className="w-full py-2 rounded-lg cursor-pointer bg-slate-900 text-white font-bold hover:bg-primary transition-all duration-300 mt-4 shadow-xl shadow-slate-900/10 disabled:bg-slate-400"
+              className="w-full py-3 rounded-xl cursor-pointer bg-primary text-white font-bold hover:bg-primary-dark transition-all duration-200 mt-4 shadow-lg shadow-primary/20 disabled:bg-slate-300"
             >
               {loading ? 'Sending Link...' : 'Send Reset Link'}
             </button>
