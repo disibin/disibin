@@ -22,8 +22,8 @@ const MainPage = () => {
       <Bio />
       <About />
       <Services/>
-      <Reviews />
       <Partners />
+      <Reviews />
       <Identity/>
     </main>
   )
