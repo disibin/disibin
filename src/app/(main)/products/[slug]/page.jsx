@@ -125,21 +125,7 @@ export default function ProductDetailPage() {
             </h1>
           </div>
 
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <span className="text-3xl font-semibold text-slate-900 font-poppins">
-              {finalPrice > 0 ? `$${finalPrice.toLocaleString()}` : 'Free / Contact'}
-            </span>
-            {discountAmount > 0 && (
-              <>
-                <span className="text-slate-400 text-base line-through font-semibold font-poppins">
-                  ${originalPrice.toLocaleString()}
-                </span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200 font-poppins">
-                  ${discountAmount.toLocaleString()} OFF
-                </span>
-              </>
-            )}
-          </div>
+
 
           <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
             {product.demo_url && (
@@ -162,31 +148,7 @@ export default function ProductDetailPage() {
             </Link>
           </div>
 
-          {(setupFee > 0 || serviceCharge > 0) && (
-            <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3">
-              <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider font-poppins">Additional Fees &amp; Charges</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-medium text-slate-700">
-                {setupFee > 0 && (
-                  <div className="flex flex-col gap-0.5 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs font-poppins">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500 font-medium">Setup Fee:</span>
-                      <span className="font-semibold text-slate-900">${setupFee.toLocaleString()}</span>
-                    </div>
-                    <span className="text-[11px] text-slate-400 font-normal">Domain &amp; Hosting cost</span>
-                  </div>
-                )}
-                {serviceCharge > 0 && (
-                  <div className="flex flex-col gap-0.5 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs font-poppins">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500 font-medium">Service Charge:</span>
-                      <span className="font-semibold text-slate-900">${serviceCharge.toLocaleString()}</span>
-                    </div>
-                    <span className="text-[11px] text-slate-400 font-normal">Maintenance fee (after every year)</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+  
 
           {/* 6. Description */}
           <div className="space-y-3 pt-4 border-t border-slate-100">

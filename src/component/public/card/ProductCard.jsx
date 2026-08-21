@@ -9,7 +9,6 @@ const ProductCard = ({ product }) => {
     product?.images?.find((img) => img.is_primary)?.image ||
     product?.images?.[0]?.image;
 
-  // Extract pricing from product.prices object or fallback top-level properties
   const priceObj = product?.prices || {};
   const price = Number(product?.price ?? priceObj.price) || 0;
   const discount = Number(product?.discount ?? priceObj.discount) || 0;
@@ -27,7 +26,7 @@ const ProductCard = ({ product }) => {
     >
       <Link
         href={`/products/${product?.slug}`}
-        className="group flex flex-col w-full bg-white border border-slate-200/80 rounded-xl overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-full"
+        className="group flex flex-col w-full gap-3 overflow-hidden shadow-md hover:-translate-y-1 transition-all duration-300 h-full"
       >
         <div className="relative w-full aspect-video overflow-hidden bg-slate-100">
           {primaryImage ? (
@@ -56,26 +55,6 @@ const ProductCard = ({ product }) => {
             {product?.name}
           </h2>
 
-          <div className="flex flex-col gap-1.5 pt-3 border-t border-slate-100 mt-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-bold text-slate-900 font-poppins">
-                  ${finalPrice}
-                </span>
-                {discount > 0 && (
-                  <span className="text-xs text-slate-400 line-through font-poppins">
-                    ${price}
-                  </span>
-                )}
-              </div>
-
-              {discount > 0 && (
-                <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60 px-2 py-0.5 rounded-md font-poppins">
-                  ${discount} OFF
-                </span>
-              )}
-            </div>
-          </div>
         </div>
       </Link>
     </motion.div>
