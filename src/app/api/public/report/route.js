@@ -23,10 +23,11 @@ export async function POST(req) {
             );
         }
 
-        // Insert into reports table
+        // Insert into supports table
+        const reportSubject = `[Issue Report] ${subject}`;
         const res = await dbQuery(
-            `INSERT INTO reports (name, email, subject, description) VALUES ($1, $2, $3, $4) RETURNING id, name, email, subject, created_at`,
-            [name, email, subject, description]
+            `INSERT INTO supports (name, email, subject, description) VALUES ($1, $2, $3, $4) RETURNING id, name, email, subject, created_at`,
+            [name, email, reportSubject, description]
         );
         const report = res.rows[0];
 
@@ -57,3 +58,4 @@ export async function POST(req) {
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
+

@@ -38,7 +38,7 @@ const TeamPage = () => {
   };
 
   return (
-    <div className="w-full relative overflow-hidden pb-10 pt-24 min-h-screen flex flex-col items-center">
+    <div className="w-full relative overflow-hidden pb-10 pt-6 min-h-screen flex flex-col items-center">
     
       <div className="flex flex-col items-center justify-center  px-4 text-center mb-10 animate-fade-in">
         <h1 className="text-3xl sm:text-5xl font-semibold mb-4 text-slate-900 tracking-tight">

@@ -1,20 +1,12 @@
 'use client';
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-const ProductCard = ({ product }) => {
-  const primaryImage =
-    product?.images?.find((img) => img.is_primary)?.image ||
-    product?.images?.[0]?.image;
-
-  const priceObj = product?.prices || {};
-  const price = Number(product?.price ?? priceObj.price) || 0;
-  const discount = Number(product?.discount ?? priceObj.discount) || 0;
-  const setupFee = Number(product?.setup_fee ?? priceObj.setup_fee) || 0;
-
-  const finalPrice = Math.max(0, price - discount);
+const ProductCard = ({ product, index = 0 }) => {
+  const imageSrc = product?.image;
+  const targetLink = product?.link || '#';
+  const formattedNumber = String(index + 1).padStart(2, '0');
 
   return (
     <motion.div
@@ -24,39 +16,45 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.3 }}
       className="h-full"
     >
-      <Link
-        href={`/products/${product?.slug}`}
-        className="group flex flex-col w-full gap-3 overflow-hidden shadow-md hover:-translate-y-1 transition-all duration-300 h-full"
+      <a
+        href={targetLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex flex-col no-underline bg-white  overflow-hidden box-border h-full border border-slate-100 shadow-xs hover:shadow-md transition-all duration-300"
       >
-        <div className="relative w-full aspect-video overflow-hidden bg-slate-100">
-          {primaryImage ? (
+        <div className="p-6 flex flex-col gap-4 grow">
+          <p className="text-[14px] font-semibold text-gray-500 m-0">
+            {formattedNumber}
+          </p>
+
+          <h3 className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors m-0 font-poppins">
+            {product?.name}
+          </h3>
+
+          <p className="text-[16px] leading-normal text-gray-900 m-0 font-poppins line-clamp-3">
+            {product?.title }
+          </p>
+        </div>
+
+        <div className="relative w-full overflow-hidden px-4 flex items-end bg-emerald-50  aspect-video">
+          {imageSrc ? (
             <Image
-              src={primaryImage}
-              alt={product?.name || 'Product'}
-              width={500}
-              height={500}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              src={imageSrc}
+              alt={product?.name || 'Product Image'}
+              width={600}
+              height={350}
+              className="w-full aspect-video h-auto block will-change-[transform,border-color] transition-[transform,border-color] duration-500 ease-[cubic-bezier(0,0,0,0.98)]   "
+              unoptimized
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm font-poppins">
+            <div className="w-full h-48 bg-slate-50 flex items-center justify-center text-slate-400 text-sm font-poppins border border-[#360065]/13">
               No preview image
             </div>
           )}
 
-          {product?.is_featured && (
-            <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs font-poppins">
-              Featured
-            </span>
-          )}
+          <div className="absolute inset-0 pointer-events-none" />
         </div>
-
-        <div className="p-4 flex flex-col justify-between grow gap-3">
-          <h2 className="font-semibold text-slate-900 group-hover:text-primary transition-colors font-poppins line-clamp-2 text-base">
-            {product?.name}
-          </h2>
-
-        </div>
-      </Link>
+      </a>
     </motion.div>
   );
 };

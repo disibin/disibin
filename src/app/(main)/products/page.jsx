@@ -21,7 +21,7 @@ const ProductsPage = () => {
 
   return (
     <div className="min-h-screen w-full px-4 sm:px-6 lg:px-8 pb-16">
-      <div className="w-full flex flex-col gap-10 ">
+      <div className="w-full max-w-7xl mx-auto flex flex-col gap-10 ">
         <div className="text-center">
           <h1 className="text-3xl sm:text-5xl text-slate-900 font-semibold font-poppins">
             Our Premium Products
@@ -31,9 +31,9 @@ const ProductsPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
 

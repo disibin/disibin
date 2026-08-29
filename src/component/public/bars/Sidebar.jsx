@@ -4,13 +4,7 @@ import React, { useContext } from 'react'
 import { Context } from '../../helper/Context'
 
 const Sidebar = () => {
-  const {
-    sidebar,
-    setSidebar,
-    isLoggedIn,
-    handleLogout,
-    userData,
-  } = useContext(Context)
+  const { sidebar, setSidebar } = useContext(Context)
 
   const closeSidebar = () => {
     setSidebar(false)
@@ -19,7 +13,9 @@ const Sidebar = () => {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
+    { name: 'Board', href: '/board' },
     { name: 'Career', href: '/career' },
+    { name: 'FAQ', href: '/faq' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ]
@@ -63,61 +59,10 @@ const Sidebar = () => {
               </Link>
             ))}
           </div>
-
-          <div className='w-full h-px bg-slate-100 my-2'></div>
-
-          {isLoggedIn ? (
-            <div className='flex flex-col gap-2'>
-              <Link
-                href={userData?.role === 'user' ? '/user' : '/dashboard'}
-                onClick={closeSidebar}
-                className='w-full px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-primary/10 hover:text-primary transition-all duration-300 text-center'
-              >
-                Dashboard
-              </Link>
-
-              <Link
-                href='/user/profile'
-                onClick={closeSidebar}
-                className='w-full px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-primary/10 hover:text-primary transition-all duration-300 text-center'
-              >
-                Profile
-              </Link>
-
-          
-              <button
-                onClick={() => {
-                  closeSidebar()
-                  handleLogout()
-                }}
-                className='w-full px-4 py-3 rounded-xl text-secondary font-medium hover:bg-red-50 transition-all duration-300'
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className='flex flex-col gap-3'>
-              <Link
-                href='/login'
-                onClick={closeSidebar}
-                className='w-full py-3 rounded-xl bg-slate-100 text-primary text-center font-semibold  transition-all duration-300'
-              >
-                Login
-              </Link>
-
-              <Link
-                href='/register'
-                onClick={closeSidebar}
-                className='w-full py-3 rounded-xl bg-primary text-white text-center font-semibold hover:bg-secondary hover:text-tertiary-light transition-all duration-300'
-              >
-                Register
-              </Link>
-            </div>
-          )}
         </div>
       </div>
     </>
   )
 }
 
-export default Sidebar
+export default Sidebar

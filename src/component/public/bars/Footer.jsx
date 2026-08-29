@@ -22,20 +22,19 @@ const Footer = () => {
               <Link href='/about' className='hover:text-secondary transition-colors'>Our Vision</Link>
               <Link href='/board' className='hover:text-secondary transition-colors'>Advisory Board</Link>
               <Link href='/career' className='hover:text-secondary transition-colors'>Careers</Link>
-              <Link href='/join-us' className='hover:text-secondary transition-colors'>Join Us</Link>
             </div>
           </div>
 
           <div className='space-y-6'>
             <h4 className='text-xs font-semibold uppercase tracking-widest text-slate-50'>Resources & Support</h4>
             <div className='flex flex-col gap-3 text-sm text-tertiary-light'>
-              <Link href='/videos' className='hover:text-secondary transition-colors'>Videos</Link>
               <Link href='/contact' className='hover:text-secondary transition-colors'>Support Desk</Link>
-              <Link href='/report' className='hover:text-secondary transition-colors'>Report Issue</Link>
-              <Link href='/reviews' className='hover:text-secondary transition-colors'>Reviews</Link>
-              <Link href='/designs' className='hover:text-secondary transition-colors'>Designs</Link>
+              <Link href='/faq' className='hover:text-secondary transition-colors'>FAQ</Link>
+              <Link href='/about' className='hover:text-secondary transition-colors'>About Us</Link>
+              <Link href='/join-us' className='hover:text-secondary transition-colors'>Join Us</Link>
             </div>
           </div>
+
 
           <div className='space-y-6'>
             <h4 className='text-xs font-semibold uppercase tracking-widest text-slate-50'>Legal Policies</h4>
@@ -63,7 +62,7 @@ const Footer = () => {
         <div className='pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6'>
 
           <div className='flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left'>
-            <Link href="/" className='text-2xl font-bold tracking-tight text-white font-poppins hover:text-secondary transition-colors'>
+            <Link href="/" className='text-2xl font-semibold tracking-tight text-white font-poppins hover:text-secondary transition-colors'>
               Disibin
             </Link>
             <span className='hidden sm:inline text-white/30'>|</span>

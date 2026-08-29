@@ -62,7 +62,7 @@ const Bio = () => {
       >
         <h2 className='font-poppins text-3xl sm:text-5xl font-semibold text-slate-900 leading-tight max-w-2xl'>
           A High-Care Studio Built On{' '}
-          <span className='text-primary font-bold'>Clarity &amp; Impact</span>
+          <span className='text-primary font-semibold'>Clarity &amp; Impact</span>
         </h2>
       </motion.div>
 

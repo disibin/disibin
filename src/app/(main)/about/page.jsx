@@ -62,7 +62,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="text-slate-900 w-full antialiased  pt-20">
+    <div className="text-slate-900 w-full antialiased pt-6">
 
       <section className="w-full p-4 md:p-10 lg:p-20">
         <motion.div
@@ -73,14 +73,14 @@ const AboutPage = () => {
         >
           <motion.span
             variants={fadeUp}
-            className="inline-block uppercase tracking-[0.25em] text-xs font-bold text-slate-400 mb-8"
+            className="inline-block uppercase tracking-[0.25em] text-xs font-semibold text-slate-400 mb-8"
           >
             About Us
           </motion.span>
 
           <motion.h1
             variants={fadeUp}
-            className="text-4xl sm:text-5xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight text-slate-900 mb-10"
+            className="text-4xl sm:text-5xl lg:text-8xl font-semibold leading-[1.05] tracking-tight text-slate-900 mb-10"
           >
             Digital Solutions &<br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-slate-900 via-primary to-secondary">
@@ -137,7 +137,7 @@ const AboutPage = () => {
               <div className="p-3 bg-slate-50 rounded-xl w-fit border border-slate-100">
                 {value.icon}
               </div>
-              <h3 className="text-xl font-bold text-slate-900 tracking-tight">{value.title}</h3>
+              <h3 className="text-xl font-semibold text-slate-900 tracking-tight">{value.title}</h3>
               <p className="text-sm text-slate-500 leading-relaxed">{value.desc}</p>
             </motion.div>
           ))}
@@ -155,7 +155,7 @@ const AboutPage = () => {
           viewport={{ once: false }}
           variants={fadeUp}
         >
-          <h2 className="text-5xl sm:text-7xl font-extrabold tracking-tighter leading-[1.05] text-white mb-8">
+          <h2 className="text-5xl sm:text-7xl font-semibold tracking-tighter leading-[1.05] text-white mb-8">
             every day,<br />for years.
           </h2>
           <p className="text-xl md:text-2xl text-slate-400 font-medium mb-14 leading-relaxed">
@@ -164,7 +164,7 @@ const AboutPage = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/career"
-              className="inline-flex items-center justify-center px-10 py-5 bg-white text-slate-900 text-lg font-bold rounded-full hover:bg-secondary hover:text-tertiary-light transition-colors shadow-xl"
+              className="inline-flex items-center justify-center px-10 py-5 bg-white text-slate-900 text-lg font-semibold rounded-full hover:bg-secondary hover:text-tertiary-light transition-colors shadow-xl"
             >
               Join our team
             </Link>
@@ -192,11 +192,11 @@ const AboutPage = () => {
           >
             {metrics.map((m, i) => (
               <motion.div key={i} variants={fadeUp} className="flex flex-col">
-                <span className="text-6xl md:text-8xl font-extrabold text-slate-900 tracking-tighter leading-none mb-3">
+                <span className="text-6xl md:text-8xl font-semibold text-slate-900 tracking-tighter leading-none mb-3">
                   {m.value}
                   <span className="text-primary">{m.suffix}</span>
                 </span>
-                <span className="text-base font-bold text-slate-800 mb-1">{m.label}</span>
+                <span className="text-base font-semibold text-slate-800 mb-1">{m.label}</span>
                 <span className="text-sm text-slate-400">{m.sub}</span>
               </motion.div>
             ))}
@@ -216,8 +216,8 @@ const AboutPage = () => {
           className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12"
         >
           <motion.div variants={fadeUp}>
-            <span className="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-2">Technical Standards</span>
-            <h3 className="text-3xl font-extrabold tracking-tight text-slate-900">Our Stack Infrastructure</h3>
+            <span className="text-xs font-semibold tracking-widest text-indigo-600 uppercase block mb-2">Technical Standards</span>
+            <h3 className="text-3xl font-semibold tracking-tight text-slate-900">Our Stack Infrastructure</h3>
             <p className="text-sm text-slate-500 mt-3 leading-relaxed ">
               We operate exclusively on fully typed, optimized modern languages that decouple safely and run seamlessly at scale.
             </p>
@@ -226,7 +226,7 @@ const AboutPage = () => {
           <motion.div variants={fadeUp} className="divide-y divide-slate-100 border-t border-b border-slate-100">
             {techMatrix.map((item, index) => (
               <div key={index} className="py-5 grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-2 sm:gap-6 text-sm">
-                <span className="font-bold text-slate-800 uppercase tracking-wide text-xs pt-0.5">{item.category}</span>
+                <span className="font-semibold text-slate-800 uppercase tracking-wide text-xs pt-0.5">{item.category}</span>
                 <span className="text-slate-600 font-mono text-xs sm:text-sm">{item.tools}</span>
               </div>
             ))}
@@ -247,7 +247,7 @@ const AboutPage = () => {
             viewport={{ once: false }}
             variants={fadeUp}
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6">
+            <h2 className="text-4xl md:text-5xl font-semibold text-slate-900 leading-tight mb-6">
               Constantly <br />Evolving
             </h2>
             <p className="text-lg text-slate-500 leading-relaxed ">
@@ -269,7 +269,7 @@ const AboutPage = () => {
                 className="relative pl-10 pb-14 border-l-2 border-slate-200 last:border-transparent group"
               >
                 <div className="absolute -left-2.25 top-1 w-4 h-4 rounded-full bg-white border-2 border-slate-300 group-hover:border-primary group-hover:bg-primary/10 transition-all duration-300" />
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">{item.title}</h3>
+                <h3 className="text-2xl font-semibold text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-base text-slate-500 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
@@ -289,8 +289,8 @@ const AboutPage = () => {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.span variants={fadeUp} className="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-2">Continuous Lifecycle</motion.span>
-          <motion.h3 variants={fadeUp} className="text-3xl font-extrabold tracking-tight text-slate-900">Post-Launch Web Management</motion.h3>
+          <motion.span variants={fadeUp} className="text-xs font-semibold tracking-widest text-indigo-600 uppercase block mb-2">Continuous Lifecycle</motion.span>
+          <motion.h3 variants={fadeUp} className="text-3xl font-semibold tracking-tight text-slate-900">Post-Launch Web Management</motion.h3>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -303,7 +303,7 @@ const AboutPage = () => {
               variants={fadeUp}
               className="border-t border-slate-200 pt-6 space-y-2"
             >
-              <div className="flex items-center gap-2 font-bold text-slate-900 text-base">
+              <div className="flex items-center gap-2 font-semibold text-slate-900 text-base">
                 {pillar.icon}
                 <span>{pillar.title}</span>
               </div>
@@ -338,4 +338,4 @@ const AboutPage = () => {
   );
 };
 
-export default AboutPage;
+export default AboutPage;

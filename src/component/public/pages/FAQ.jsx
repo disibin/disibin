@@ -39,7 +39,7 @@ export default function FAQ() {
         >
           <h2 className="font-poppins text-3xl sm:text-5xl font-semibold text-slate-900 tracking-tight mb-4">
             Frequently Asked{' '}
-            <span className="text-primary font-bold">Questions</span>
+            <span className="text-primary font-semibold">Questions</span>
           </h2>
           <p className="text-slate-500 font-poppins text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
             Questions about web development strategies, mobile applications, e-commerce systems, API integrations, or database safety? We have compiled answers to our most common inquiries.
@@ -114,7 +114,7 @@ export default function FAQ() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-14 text-center bg-slate-900 text-white rounded-xl p-10 shadow-xl shadow-slate-200"
         >
-          <h3 className="font-poppins text-xl font-bold mb-2">Still have a specific question about your project?</h3>
+          <h3 className="font-poppins text-xl font-semibold mb-2">Still have a specific question about your project?</h3>
           <p className="text-slate-400 text-sm max-w-sm mx-auto mb-7 font-poppins leading-relaxed">
             Get in touch directly to discuss your requirements, estimated timeline, custom features, or web & mobile app architecture.
           </p>

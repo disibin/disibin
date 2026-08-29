@@ -11,7 +11,7 @@ export default async function PrivacyPolicyPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-20 px-6 font-sans min-h-screen">
-      <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-8 border-b border-slate-200 pb-4">
+      <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 border-b border-slate-200 pb-4">
         Privacy Policy
       </h1>
 

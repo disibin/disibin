@@ -49,7 +49,7 @@ const About = () => {
                 transition={{ delay: i * 0.1 + 0.2, duration: 0.5 }}
                 className="bg-tertiary rounded-2xl px-6 py-4 flex flex-col items-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default"
               >
-                <span className="text-lg font-bold text-tertiary-dark font-poppins">{h.value}</span>
+                <span className="text-lg font-semibold text-tertiary-dark font-poppins">{h.value}</span>
                 <span className="text-xs text-tertiary-dark font-poppins mt-0.5">{h.label}</span>
               </motion.div>
             ))}

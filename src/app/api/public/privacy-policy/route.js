@@ -5,10 +5,10 @@ import { dbQuery } from "@/lib/database/pg";
 export async function GET() {
     try {
         const res = await dbQuery(`
-            SELECT id, title, content, order_num, created_at, updated_at
+            SELECT id, title, content, created_at, updated_at
             FROM privacy_policies
             WHERE is_published = true
-            ORDER BY order_num ASC, id ASC
+            ORDER BY id ASC
         `);
 
         return NextResponse.json({ success: true, data: res.rows });
@@ -16,3 +16,4 @@ export async function GET() {
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
+

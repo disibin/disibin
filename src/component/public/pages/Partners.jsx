@@ -63,7 +63,7 @@ export default function Partners() {
 
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
             Valued Industry Partners
           </h2>
           <p className="text-slate-500 text-sm">
@@ -135,14 +135,14 @@ function PartnerCard({ partner }) {
             className="w-full h-full object-contain filter transition-all duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary font-extrabold text-xl flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary font-semibold text-xl flex items-center justify-center">
             {partner.company_name?.charAt(0).toUpperCase() || 'P'}
           </div>
         )}
       </div>
 
       <div className="space-y-1 w-full">
-        <p className="font-bold text-slate-800 text-xs truncate group-hover:text-primary transition-colors">
+        <p className="font-semibold text-slate-800 text-xs truncate group-hover:text-primary transition-colors">
           {partner.company_name}
         </p>
         <a href={partner.business_url || '#'}

@@ -11,7 +11,7 @@ export default async function TermsOfServicePage() {
 
   return (
     <div className="w-full p-6 md:p-20 font-sans min-h-screen">
-      <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-8 border-b border-slate-200 pb-4">
+      <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900 mb-8 border-b border-slate-200 pb-4">
         Terms of Service
       </h1>
 

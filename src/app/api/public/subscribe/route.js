@@ -22,9 +22,9 @@ export async function POST(req) {
             );
         }
 
-        // Check if email already exists in client_leads
+        // Check if email already subscribed in supports table
         const checkRes = await dbQuery(
-            "SELECT id FROM client_leads WHERE LOWER(email) = $1",
+            "SELECT id FROM supports WHERE LOWER(email) = $1 AND subject = 'Newsletter Subscription'",
             [cleanEmail]
         );
 
@@ -35,32 +35,21 @@ export async function POST(req) {
             );
         }
 
-        // Extract name from the part before '@'
         const rawPrefix = cleanEmail.split('@')[0] || 'Subscriber';
-        // Capitalize first letter
         const extractedName = rawPrefix.charAt(0).toUpperCase() + rawPrefix.slice(1);
 
         const insertRes = await dbQuery(
-            `INSERT INTO client_leads (name, email, note)
-             VALUES ($1, $2, $3)
-             RETURNING id, name, email, note, created_at`,
-            [extractedName, cleanEmail, "Subscribed via Website Footer Newsletter"]
+            `INSERT INTO supports (name, email, subject, description)
+             VALUES ($1, $2, 'Newsletter Subscription', 'Subscribed via Website Footer Newsletter')
+             RETURNING id, name, email, subject, created_at`,
+            [extractedName, cleanEmail]
         );
-
-        const newLead = insertRes.rows[0];
-
-        // Log activity
-        await dbQuery(
-            `INSERT INTO activity_logs (team_id, action, entity_type, entity_id, description)
-             VALUES (NULL, 'NEWSLETTER_SUBSCRIBE', 'client_lead', $1, $2)`,
-            [newLead.id, `New website subscriber: ${cleanEmail}`]
-        ).catch(() => {});
 
         return NextResponse.json(
             {
                 success: true,
                 message: "Thank you for subscribing to our newsletter!",
-                data: newLead
+                data: insertRes.rows[0]
             },
             { status: 201 }
         );
@@ -72,3 +61,4 @@ export async function POST(req) {
         );
     }
 }
+

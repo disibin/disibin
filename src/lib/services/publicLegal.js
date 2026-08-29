@@ -3,10 +3,10 @@ import { dbQuery } from '@/lib/database/pg';
 export async function getPublicTermsOfService() {
   try {
     const res = await dbQuery(`
-      SELECT id, title, content, order_num, updated_at
+      SELECT id, title, content, updated_at
       FROM terms_and_conditions
       WHERE is_published = true
-      ORDER BY order_num ASC, id ASC
+      ORDER BY id ASC
     `);
     return res.rows || [];
   } catch (error) {
@@ -18,10 +18,10 @@ export async function getPublicTermsOfService() {
 export async function getPublicPrivacyPolicy() {
   try {
     const res = await dbQuery(`
-      SELECT id, title, content, order_num, updated_at
+      SELECT id, title, content, updated_at
       FROM privacy_policies
       WHERE is_published = true
-      ORDER BY order_num ASC, id ASC
+      ORDER BY id ASC
     `);
     return res.rows || [];
   } catch (error) {
@@ -33,10 +33,10 @@ export async function getPublicPrivacyPolicy() {
 export async function getPublicRefundPolicy() {
   try {
     const res = await dbQuery(`
-      SELECT id, title, content, order_num, updated_at
+      SELECT id, title, content, updated_at
       FROM refund_conditions
       WHERE is_published = true
-      ORDER BY order_num ASC, id ASC
+      ORDER BY id ASC
     `);
     return res.rows || [];
   } catch (error) {
@@ -45,12 +45,13 @@ export async function getPublicRefundPolicy() {
   }
 }
 
-export async function getProductMetadataBySlug(slug) {
+export async function getProductMetadataById(id) {
   try {
-    const res = await dbQuery('SELECT name, description FROM products WHERE slug = $1', [slug]);
+    const res = await dbQuery('SELECT name, title FROM products WHERE id = $1', [id]);
     return res.rows[0] || null;
   } catch (error) {
     console.error('Dynamic product metadata query failed:', error);
     return null;
   }
 }
+
