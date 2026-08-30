@@ -10,7 +10,7 @@ const Identity = () => {
   }
 
   return (
-    <div className="w-full p-4 md:p-20 flex flex-col items-center justify-center gap-4 bg-tertiary-light overflow-hidden">
+    <div className="w-full p-20 flex flex-col items-center justify-center gap-4 bg-tertiary-light overflow-hidden">
       <motion.div
         variants={fadeUp}
         initial="hidden"

@@ -6,6 +6,7 @@ import Intro from '@/component/public/pages/Intro'
 import Partners from '@/component/public/pages/Partners'
 import Reviews from '@/component/public/pages/Reviews'
 import Services from '@/component/public/pages/Services'
+import Webs from '@/component/public/pages/Webs'
 import React from 'react'
 
 export const metadata = {
@@ -21,6 +22,7 @@ const MainPage = () => {
       <Intro />
       <Bio />
       <About />
+      <Webs/>
       <Services/>
       <Partners />
       <Reviews />
