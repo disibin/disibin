@@ -1,5 +1,8 @@
+"use client";
+
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 // Import renamed image assets matching slugs
 import onlineOrdersAndSecureCheckout from '../../../../public/online-orders-and-secure-checkout.jpg';
@@ -200,35 +203,107 @@ const data = [
     },
 ];
 
-const Webs = () => {
-  return (
-    <div className='w-full overflow-hidden'>
-        {
-            data && data.length > 0 && <div className='w-full'>
-                {
-                    data.map((d)=>(
-                        <div key={d.id} className='w-full p-4 md:p-20 flex flex-col items-center justify-center gap-14'>
-                            <h1 className='text-2xl md:text-4xl font-semibold'>{d.title}</h1>
-                            <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-4'>
-                                {
-                                    d.details.map((de)=>(
-                                        <div key={de.id} className='w-full flex flex-col even:flex-col-reverse items-center justify-between gap-4 p-2 '>
-                                            <div className='w-full flex flex-col gap-3'>
-                                                <h1 className='text-xl font-semibold'>{de.title}</h1>
-                                                <p>{de.description}</p>
-                                            </div>
-                                            {de.image && <Image width={400} height={400} src={de.image} alt={de.title} className='w-full aspect-square overflow-hidden object-cover'/>}
-                                        </div>
-                                    ))
-                                }
-                            </div>
+const DetailSlider = ({ details }) => {
+    const sliderRef = useRef(null);
+    const [isMouseDown, setIsMouseDown] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const handleMouseDown = (e) => {
+        setIsMouseDown(true);
+        setStartX(e.pageX - (sliderRef.current?.offsetLeft || 0));
+        setScrollLeft(sliderRef.current?.scrollLeft || 0);
+    };
+
+    const handleMouseLeave = () => {
+        setIsMouseDown(false);
+    };
+
+    const handleMouseUp = () => {
+        setIsMouseDown(false);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isMouseDown || !sliderRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - sliderRef.current.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    return (
+        <div className="w-full flex flex-col items-center">
+            {/* Slider track on mobile/tablet (< lg), Grid layout on desktop (>= lg) */}
+            <div
+                ref={sliderRef}
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                className="w-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-4 p-2 cursor-grab active:cursor-grabbing select-none lg:grid lg:grid-cols-4 lg:overflow-visible lg:snap-none lg:cursor-default"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+                {details.map((de, idx) => (
+                    <motion.div
+                        key={de.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        transition={{ duration: 0.5, delay: idx * 0.1 }}
+                        whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                        className="w-100 max-w-100 mx-auto shrink-0 snap-center lg:w-full lg:max-w-none lg:shrink lg:snap-align-none flex flex-col even:flex-col-reverse items-center justify-between gap-4 p-4 text-center lg:p-2"
+                    >
+                        <div className="w-full flex flex-col gap-3">
+                            <h1 className="text-xl font-semibold">{de.title}</h1>
+                            <p className="text-slate-600 text-sm leading-relaxed">{de.description}</p>
                         </div>
-                    ))
-                }
-            </div> 
-        }
-    </div>
-  )
-}
+                        {de.image && (
+                            <Image
+                                width={400}
+                                height={400}
+                                src={de.image}
+                                alt={de.title}
+                                draggable={false}
+                                className="w-full aspect-square overflow-hidden object-cover rounded-lg pointer-events-none"
+                            />
+                        )}
+                    </motion.div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const Webs = () => {
+    return (
+        <div className="w-full overflow-hidden">
+            {data && data.length > 0 && (
+                <div className="w-full">
+                    {data.map((d) => (
+                        <motion.div
+                            key={d.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.15 }}
+                            transition={{ duration: 0.6 }}
+                            className="w-full p-4 lg:p-20 flex flex-col items-center justify-center gap-8"
+                        >
+                            <motion.h1
+                                initial={{ opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: false, amount: 0.2 }}
+                                transition={{ duration: 0.5, delay: 0.1 }}
+                                className="text-2xl lg:text-4xl font-semibold text-primary text-center"
+                            >
+                                {d.title}
+                            </motion.h1>
+                            <DetailSlider details={d.details} />
+                        </motion.div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default Webs;
